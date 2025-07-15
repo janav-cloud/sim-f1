@@ -1,0 +1,21 @@
+driver_name,team_name,skill,consistency,tire_management,wet_weather_ability,overtaking_skill,defending_skill
+Max Verstappen,Oracle Red Bull Racing,0.98,0.97,0.96,0.95,0.97,0.96
+Sergio Pérez,Oracle Red Bull Racing,0.87,0.85,0.86,0.84,0.85,0.86
+Charles Leclerc,Scuderia Ferrari HP,0.94,0.91,0.89,0.9,0.92,0.9
+Carlos Sainz Jr.,Scuderia Ferrari HP,0.92,0.9,0.89,0.88,0.89,0.89
+Lewis Hamilton,Mercedes-AMG Petronas F1 ,0.97,0.93,0.91,0.96,0.94,0.92
+George Russell,Mercedes-AMG Petronas F1 ,0.92,0.91,0.89,0.9,0.89,0.89
+Lando Norris,McLaren Formula 1 ,0.93,0.91,0.9,0.89,0.92,0.9
+Oscar Piastri,McLaren Formula 1 ,0.95,0.94,0.93,0.92,0.94,0.93
+Fernando Alonso,Aston Martin Aramco F1 ,0.83,0.8,0.78,0.77,0.8,0.85
+Lance Stroll,Aston Martin Aramco F1 ,0.79,0.76,0.73,0.72,0.72,0.72
+Esteban Ocon,BWT Alpine F1 ,0.85,0.82,0.8,0.78,0.82,0.8
+Jack Doohan,BWT Alpine F1 ,0.78,0.75,0.72,0.71,0.75,0.73
+Alexander Albon,Williams Racing,0.8,0.75,0.74,0.73,0.76,0.74
+Yuki Tsunoda,Visa Cash App Racing Bulls F1 ,0.82,0.77,0.75,0.73,0.78,0.75
+Daniel Ricciardo,Williams Racing,0.83,0.8,0.78,0.77,0.8,0.78
+Nico Hulkenberg,Stake F1 Kick Sauber,0.82,0.8,0.78,0.78,0.79,0.78
+Valtteri Bottas,Stake F1 Kick Sauber,0.73,0.68,0.66,0.66,0.69,0.66
+Zhou Guanyu,MoneyGram Haas F1 ,0.71,0.67,0.63,0.62,0.66,0.63
+Liam Lawson,Visa Cash App Racing Bulls F1 ,0.8,0.81,0.8,0.78,0.74,0.8
+Andrea Kimi Antonelli,MoneyGram Haas F1 ,0.78,0.76,0.73,0.74,0.75,0.76
