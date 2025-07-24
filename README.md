@@ -18,14 +18,19 @@ A comprehensive Formula 1 race simulation engine that uses real-world-like drive
 ```bash
 f1_race_simulator/
 │
-├── circuit_data.py # Circuit metadata (length, overtaking difficulty, etc.)
-├── weather_conditions.py # Weather effects on grip, engine performance, etc.
-├── race_strategy.py # Strategy types and their acumen
-├── TEAM DATA.csv # Team attributes (pit stop speed, strategy acumen)
-├── DRIVERS DATA.csv # Driver skill profiles
-├── CALCULATIONS.csv # Car performance scores per team
-├── main.py # Main simulation script (this file)
-├── README.md # This file
+├── ers_management.py       # Defines ERS modes and management logic
+├── track_evolution.py      # Manages track state, including rubbering-in and grip evolution
+├── team_orders.py          # Contains the logic for team order decisions
+├── race_logger.py          # Provides the RaceLogger class for capturing race events
+├── circuit_data.py         # Circuit metadata (length, overtaking difficulty, etc.)
+├── weather_conditions.py   # Weather effects on grip, engine performance, etc.
+├── race_strategy.py        # Strategy types and their acumen
+├── weather_transitions.py  # Defines probabilities of weather changing
+├── TEAM DATA.csv           # Team attributes (pit stop speed, strategy acumen)
+├── DRIVERS DATA.csv        # Driver skill profiles
+├── CALCULATIONS.csv        # Car performance scores per team
+├── main.py                 # The main simulation script that runs the race
+└── README.md               # Project README file
 ```
 
 ## 📦 Requirements
