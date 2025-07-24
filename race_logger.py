@@ -15,6 +15,10 @@ class RaceLogger:
         # Logs a pit stop event.
         self.log(lap, 'Pit Stop', f"{entry.driver_name} pits from P{entry.current_position}. Stop time: {duration:.2f}s. New tires: {new_tires.capitalize()}.")
 
+    def log_pit_error(self, lap, entry, duration):
+        # Logs a pit stop event.
+        self.log(lap, 'Pit Stop Error', f"{entry.driver_name} pits from P{entry.current_position}. Error time: {duration:.2f}s.")
+
     def log_dnf(self, lap, entry):
         # Logs a driver not finishing the race.
         self.log(lap, 'DNF', f"{entry.driver_name} is out of the race from P{entry.current_position}. Reason: {entry.dnf_reason}.")
