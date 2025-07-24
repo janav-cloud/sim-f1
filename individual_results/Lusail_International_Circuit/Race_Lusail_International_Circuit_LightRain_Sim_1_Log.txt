@@ -1,0 +1,83 @@
+Lap  3: [Overtake    ] Lewis Hamilton has overtaken Carlos Sainz Jr. for P18.
+Lap  4: [Overtake    ] Carlos Sainz Jr. has overtaken Jack Doohan for P18.
+Lap  5: [Team Order  ] Team MoneyGram Haas F1  has instructed Zhou Guanyu to let Andrea Kimi Antonelli pass.
+Lap  5: [Overtake    ] Lando Norris has overtaken Jack Doohan for P18.
+Lap  6: [Overtake    ] Lance Stroll has overtaken Jack Doohan for P19.
+Lap  7: [Overtake    ] Lando Norris has overtaken Zhou Guanyu for P17.
+Lap  8: [Overtake    ] Lance Stroll has overtaken Zhou Guanyu for P16.
+Lap  9: [Weather     ] The weather has changed to Heavy Rain.
+Lap  9: [Pit Stop    ] Max Verstappen pits from P1. Stop time: 20.77s. New tires: Wet.
+Lap  9: [Pit Stop    ] Sergio Pérez pits from P2. Stop time: 21.22s. New tires: Wet.
+Lap  9: [Pit Stop    ] Charles Leclerc pits from P3. Stop time: 21.33s. New tires: Wet.
+Lap  9: [Pit Stop    ] Carlos Sainz Jr. pits from P14. Stop time: 20.87s. New tires: Wet.
+Lap  9: [Pit Stop    ] Lewis Hamilton pits from P12. Stop time: 21.67s. New tires: Wet.
+Lap  9: [Pit Stop    ] George Russell pits from P19. Stop time: 20.98s. New tires: Wet.
+Lap  9: [Pit Stop    ] Lando Norris pits from P13. Stop time: 21.27s. New tires: Wet.
+Lap  9: [Pit Stop    ] Oscar Piastri pits from P4. Stop time: 20.97s. New tires: Wet.
+Lap  9: [Pit Stop    ] Fernando Alonso pits from P5. Stop time: 21.00s. New tires: Wet.
+Lap  9: [Pit Stop    ] Lance Stroll pits from P16. Stop time: 21.23s. New tires: Wet.
+Lap  9: [Pit Stop    ] Esteban Ocon pits from P6. Stop time: 21.47s. New tires: Wet.
+Lap  9: [Pit Stop    ] Jack Doohan pits from P18. Stop time: 21.23s. New tires: Wet.
+Lap  9: [Pit Stop    ] Alexander Albon pits from P15. Stop time: 21.62s. New tires: Wet.
+Lap  9: [Pit Stop    ] Yuki Tsunoda pits from P7. Stop time: 21.03s. New tires: Wet.
+Lap  9: [Pit Stop    ] Daniel Ricciardo pits from P8. Stop time: 21.87s. New tires: Wet.
+Lap  9: [Pit Stop    ] Nico Hulkenberg pits from P9. Stop time: 21.18s. New tires: Wet.
+Lap  9: [Pit Stop    ] Valtteri Bottas pits from P10. Stop time: 21.63s. New tires: Wet.
+Lap  9: [Pit Stop    ] Zhou Guanyu pits from P17. Stop time: 21.20s. New tires: Wet.
+Lap  9: [Pit Stop    ] Liam Lawson pits from P11. Stop time: 21.30s. New tires: Wet.
+Lap  9: [Pit Stop    ] Andrea Kimi Antonelli pits from P20. Stop time: 21.59s. New tires: Wet.
+Lap  9: [Overtake    ] Lewis Hamilton has overtaken Valtteri Bottas for P17.
+Lap 10: [Overtake    ] Sergio Pérez has overtaken Jack Doohan for P15.
+Lap 11: [Overtake    ] Lando Norris has overtaken Jack Doohan for P13.
+Lap 12: [DNF         ] Jack Doohan is out of the race from P14. Reason: Driver Error (Crash).
+Lap 12: [Team Order  ] Team Scuderia Ferrari HP has instructed Carlos Sainz Jr. to let Charles Leclerc pass.
+Lap 12: [Overtake    ] Lewis Hamilton has overtaken Daniel Ricciardo for P12.
+Lap 13: [Team Order  ] Team Scuderia Ferrari HP has instructed Carlos Sainz Jr. to let Charles Leclerc pass.
+Lap 13: [Overtake    ] Liam Lawson has overtaken Nico Hulkenberg for P15.
+Lap 14: [Team Order  ] Team Scuderia Ferrari HP has instructed Charles Leclerc to let Carlos Sainz Jr. pass.
+Lap 14: [Overtake    ] Lando Norris has overtaken Fernando Alonso for P15.
+Lap 15: [Overtake    ] Lando Norris has overtaken Zhou Guanyu for P14.
+Lap 16: [Overtake    ] Fernando Alonso has overtaken Zhou Guanyu for P15.
+Lap 17: [DNF         ] Carlos Sainz Jr. is out of the race from P12. Reason: Driver Error (Crash).
+Lap 17: [Overtake    ] Nico Hulkenberg has overtaken Andrea Kimi Antonelli for P16.
+Lap 18: [Overtake    ] Liam Lawson has overtaken Zhou Guanyu for P14.
+Lap 19: [Overtake    ] Lando Norris has overtaken Lance Stroll for P11.
+Lap 20: [Overtake    ] Fernando Alonso has overtaken Lance Stroll for P12.
+Lap 21: [Overtake    ] Nico Hulkenberg has overtaken Charles Leclerc for P14.
+Lap 22: [Overtake    ] Fernando Alonso has overtaken Liam Lawson for P11.
+Lap 23: [Overtake    ] Lando Norris has overtaken Sergio Pérez for P7.
+Lap 24: [Overtake    ] Charles Leclerc has overtaken Nico Hulkenberg for P14.
+Lap 25: [Overtake    ] Nico Hulkenberg has overtaken Charles Leclerc for P13.
+Lap 26: [Overtake    ] Liam Lawson has overtaken Zhou Guanyu for P11.
+Lap 27: [Overtake    ] Oscar Piastri has overtaken Alexander Albon for P8.
+Lap 28: [Overtake    ] Nico Hulkenberg has overtaken Zhou Guanyu for P12.
+Lap 29: [Overtake    ] Daniel Ricciardo has overtaken Charles Leclerc for P15.
+Lap 30: [Overtake    ] Daniel Ricciardo has overtaken Andrea Kimi Antonelli for P14.
+Lap 31: [Overtake    ] Daniel Ricciardo has overtaken Nico Hulkenberg for P13.
+Lap 32: [Overtake    ] Fernando Alonso has overtaken Nico Hulkenberg for P12.
+Lap 33: [Overtake    ] Lance Stroll has overtaken Fernando Alonso for P10.
+Lap 34: [Overtake    ] Oscar Piastri has overtaken Alexander Albon for P9.
+Lap 35: [Overtake    ] Alexander Albon has overtaken Nico Hulkenberg for P11.
+Lap 36: [Overtake    ] Alexander Albon has overtaken Nico Hulkenberg for P11.
+Lap 38: [Overtake    ] Fernando Alonso has overtaken Lewis Hamilton for P8.
+Lap 39: [DNF         ] Sergio Pérez is out of the race from P5. Reason: Driver Error (Crash).
+Lap 39: [Overtake    ] Lando Norris has overtaken Fernando Alonso for P6.
+Lap 41: [Overtake    ] Fernando Alonso has overtaken Zhou Guanyu for P10.
+Lap 42: [Overtake    ] Oscar Piastri has overtaken Esteban Ocon for P3.
+Lap 43: [Overtake    ] Oscar Piastri has overtaken Lance Stroll for P5.
+Lap 44: [Overtake    ] Oscar Piastri has overtaken Alexander Albon for P6.
+Lap 45: [Overtake    ] Fernando Alonso has overtaken Alexander Albon for P9.
+Lap 46: [Overtake    ] Lando Norris has overtaken Zhou Guanyu for P10.
+Lap 47: [Overtake    ] Valtteri Bottas has overtaken Charles Leclerc for P13.
+Lap 48: [DNF         ] Yuki Tsunoda is out of the race from P4. Reason: Driver Error (Crash).
+Lap 48: [Overtake    ] Lando Norris has overtaken Alexander Albon for P7.
+Lap 49: [Overtake    ] Lando Norris has overtaken Fernando Alonso for P5.
+Lap 50: [Overtake    ] Lewis Hamilton has overtaken Esteban Ocon for P6.
+Lap 51: [Overtake    ] Daniel Ricciardo has overtaken Valtteri Bottas for P13.
+Lap 52: [Overtake    ] Oscar Piastri has overtaken Zhou Guanyu for P8.
+Lap 53: [Overtake    ] George Russell has overtaken Valtteri Bottas for P15.
+Lap 54: [Overtake    ] Zhou Guanyu has overtaken Esteban Ocon for P8.
+Lap 55: [Weather     ] The weather has changed to Light Rain.
+Lap 55: [Overtake    ] Esteban Ocon has overtaken Zhou Guanyu for P8.
+Lap 56: [Overtake    ] Oscar Piastri has overtaken Esteban Ocon for P7.
+Lap 57: [Overtake    ] Oscar Piastri has overtaken Nico Hulkenberg for P6.

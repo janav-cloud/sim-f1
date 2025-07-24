@@ -564,17 +564,11 @@ def generate_final_race_result(final_results):
     result_df = pd.DataFrame(result_data)
     return result_df
 
-def run_monte_carlo_simulation(num_simulations, circuit, weather, race_entries_template, enhanced_simulation=False, race_results_output_dir=None, show_logs=False, save_logs=False):
+def run_monte_carlo_simulation(num_simulations, circuit, weather, race_entries_template, enhanced_simulation=False, race_results_output_dir=None, show_logs=False, save_logs=False, save_individual_races=False):
     """Runs the race simulation multiple times for a specific weather condition."""
     print(f"\n--- Running {num_simulations} simulations for {weather['name']} conditions at {circuit['name']} ---")
     all_simulation_results = []
     
-    if race_results_output_dir:
-        circuit_specific_dir = os.path.join(race_results_output_dir, circuit['name'].replace(' ', '_'))
-        os.makedirs(circuit_specific_dir, exist_ok=True)
-        print(f"Individual race results for {circuit['name']} will be saved to: {circuit_specific_dir}")
-
-
     for sim_num in range(num_simulations):
         sim_entries = []
         for entry_template in race_entries_template:
@@ -599,7 +593,6 @@ def run_monte_carlo_simulation(num_simulations, circuit, weather, race_entries_t
             new_entry = RaceEntry(driver_data_copy, team_data_copy, car_scores_copy, 0, assigned_strategy)
             sim_entries.append(new_entry)
 
-        # Grid is now randomized
         initial_grid_positions = list(range(1, len(sim_entries) + 1))
         random.shuffle(initial_grid_positions)
         for i, entry in enumerate(sim_entries):
@@ -633,20 +626,22 @@ def run_monte_carlo_simulation(num_simulations, circuit, weather, race_entries_t
 
         if race_results_output_dir:
             circuit_folder_name = circuit['name'].replace(' ', '_')
-            
-            race_filename = f"Race_{circuit_folder_name}_{weather['name'].replace(' ', '')}_Sim_{sim_num + 1}.csv"
-            race_filepath = os.path.join(race_results_output_dir, circuit_folder_name, race_filename)
-            race_result_df.to_csv(race_filepath, index=False)
-            print(f"Individual race result saved to {race_filepath}")
+            circuit_specific_dir = os.path.join(race_results_output_dir, circuit_folder_name)
+            os.makedirs(circuit_specific_dir, exist_ok=True)
+
+            if save_individual_races:
+                race_filename = f"Race_{circuit_folder_name}_{weather['name'].replace(' ', '')}_Sim_{sim_num + 1}.csv"
+                race_filepath = os.path.join(circuit_specific_dir, race_filename)
+                race_result_df.to_csv(race_filepath, index=False)
+                print(f"Individual race result saved to {race_filepath}")
 
             if save_logs:
                 log_filename = f"Race_{circuit_folder_name}_{weather['name'].replace(' ', '')}_Sim_{sim_num + 1}_Log.txt"
-                log_filepath = os.path.join(race_results_output_dir, circuit_folder_name, log_filename)
+                log_filepath = os.path.join(circuit_specific_dir, log_filename)
                 with open(log_filepath, 'w') as f:
                     for log_entry in race_logs:
                         f.write(f"Lap {log_entry['lap']:>2}: [{log_entry['type']:<12}] {log_entry['message']}\n")
                 print(f"Individual race log saved to {log_filepath}")
-
 
         all_simulation_results.append([e.__dict__.copy() for e in simulation_results])
     return all_simulation_results
@@ -730,14 +725,20 @@ if __name__ == "__main__":
             use_enhanced = input("Use enhanced simulation features? (y/n): ").strip().lower() == 'y'
             
             save_individual_races = input("Save individual race results to CSVs? (y/n): ").strip().lower() == 'y'
+            save_logs = input("Save detailed race logs to text files? (y/n): ").strip().lower() == 'y'
+            
             race_results_output_dir = None
-            if save_individual_races:
+            if save_individual_races or save_logs:
                 base_output_folder_name = "individual_results"
                 race_results_output_dir = os.path.join(os.getcwd(), base_output_folder_name)
-                print(f"Individual race results will be saved under: {race_results_output_dir}/{{Circuit Name}}/")
-            
+                if save_individual_races and save_logs:
+                    print(f"Individual race results and logs will be saved under: {race_results_output_dir}/{{Circuit Name}}/")
+                elif save_individual_races:
+                    print(f"Individual race results will be saved under: {race_results_output_dir}/{{Circuit Name}}/")
+                elif save_logs:
+                    print(f"Individual race logs will be saved under: {race_results_output_dir}/{{Circuit Name}}/")
+
             show_logs = input("Show detailed race logs for each simulation? (y/n): ").strip().lower() == 'y'
-            save_logs = input("Save detailed race logs to text files? (y/n): ").strip().lower() == 'y'
 
 
         except (ValueError, IndexError):
@@ -786,7 +787,8 @@ if __name__ == "__main__":
                 
                 results_for_this_weather = run_monte_carlo_simulation(
                     current_weather_sims, chosen_circuit, weather_for_sim, 
-                    race_entries_template, use_enhanced, race_results_output_dir, show_logs, save_logs
+                    race_entries_template, use_enhanced, race_results_output_dir, 
+                    show_logs, save_logs, save_individual_races
                 )
                 all_sim_results_across_weathers.extend(results_for_this_weather)
             

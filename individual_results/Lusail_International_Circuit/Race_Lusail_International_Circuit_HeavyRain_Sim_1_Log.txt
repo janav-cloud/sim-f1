@@ -1,0 +1,78 @@
+Lap  1: [Weather     ] The weather has changed to Light Rain.
+Lap  2: [Overtake    ] Alexander Albon has overtaken Andrea Kimi Antonelli for P17.
+Lap  3: [Weather     ] The weather has changed to Dry.
+Lap  3: [Pit Stop    ] Max Verstappen pits from P2. Stop time: 21.35s. New tires: Medium.
+Lap  3: [Pit Stop    ] Sergio Pérez pits from P3. Stop time: 21.52s. New tires: Medium.
+Lap  3: [Pit Stop    ] Charles Leclerc pits from P4. Stop time: 21.52s. New tires: Medium.
+Lap  3: [Pit Stop    ] Carlos Sainz Jr. pits from P5. Stop time: 21.35s. New tires: Medium.
+Lap  3: [Pit Stop    ] Lewis Hamilton pits from P19. Stop time: 21.31s. New tires: Hard.
+Lap  3: [Pit Stop    ] George Russell pits from P6. Stop time: 20.86s. New tires: Hard.
+Lap  3: [Pit Stop    ] Lando Norris pits from P7. Stop time: 20.83s. New tires: Medium.
+Lap  3: [Pit Stop    ] Oscar Piastri pits from P8. Stop time: 21.70s. New tires: Medium.
+Lap  3: [Pit Stop    ] Fernando Alonso pits from P9. Stop time: 20.87s. New tires: Hard.
+Lap  3: [Pit Stop    ] Lance Stroll pits from P10. Stop time: 20.95s. New tires: Hard.
+Lap  3: [Pit Stop    ] Esteban Ocon pits from P20. Stop time: 21.73s. New tires: Medium.
+Lap  3: [Pit Stop    ] Jack Doohan pits from P11. Stop time: 21.66s. New tires: Medium.
+Lap  3: [Pit Stop    ] Alexander Albon pits from P1. Stop time: 21.48s. New tires: Hard.
+Lap  3: [Pit Stop    ] Yuki Tsunoda pits from P12. Stop time: 21.21s. New tires: Medium.
+Lap  3: [Pit Stop    ] Daniel Ricciardo pits from P13. Stop time: 21.48s. New tires: Hard.
+Lap  3: [Pit Stop    ] Nico Hulkenberg pits from P14. Stop time: 21.89s. New tires: Medium.
+Lap  3: [Pit Stop    ] Valtteri Bottas pits from P15. Stop time: 21.63s. New tires: Medium.
+Lap  3: [Pit Stop    ] Zhou Guanyu pits from P16. Stop time: 21.62s. New tires: Medium.
+Lap  3: [Pit Stop    ] Liam Lawson pits from P17. Stop time: 21.79s. New tires: Medium.
+Lap  3: [Pit Stop    ] Andrea Kimi Antonelli pits from P18. Stop time: 21.49s. New tires: Medium.
+Lap  3: [Overtake    ] Lewis Hamilton has overtaken Nico Hulkenberg for P18.
+Lap  4: [Overtake    ] Lewis Hamilton has overtaken Andrea Kimi Antonelli for P16.
+Lap  5: [Overtake    ] Oscar Piastri has overtaken Jack Doohan for P15.
+Lap  6: [Overtake    ] Liam Lawson has overtaken Jack Doohan for P16.
+Lap  7: [Overtake    ] Nico Hulkenberg has overtaken Andrea Kimi Antonelli for P17.
+Lap  8: [Overtake    ] Valtteri Bottas has overtaken Zhou Guanyu for P15.
+Lap  9: [Overtake    ] Oscar Piastri has overtaken Charles Leclerc for P14.
+Lap 10: [Overtake    ] Sergio Pérez has overtaken Liam Lawson for P13.
+Lap 11: [Overtake    ] Liam Lawson has overtaken Nico Hulkenberg for P14.
+Lap 12: [Overtake    ] Andrea Kimi Antonelli has overtaken Jack Doohan for P18.
+Lap 13: [Overtake    ] Jack Doohan has overtaken Andrea Kimi Antonelli for P18.
+Lap 14: [Overtake    ] Charles Leclerc has overtaken Jack Doohan for P15.
+Lap 15: [Overtake    ] Nico Hulkenberg has overtaken Zhou Guanyu for P16.
+Lap 16: [Overtake    ] Andrea Kimi Antonelli has overtaken Zhou Guanyu for P18.
+Lap 17: [Overtake    ] Zhou Guanyu has overtaken Jack Doohan for P18.
+Lap 18: [Overtake    ] Andrea Kimi Antonelli has overtaken Zhou Guanyu for P17.
+Lap 19: [Overtake    ] Daniel Ricciardo has overtaken Valtteri Bottas for P13.
+Lap 20: [Overtake    ] Jack Doohan has overtaken Zhou Guanyu for P18.
+Lap 21: [Overtake    ] Liam Lawson has overtaken Andrea Kimi Antonelli for P12.
+Lap 22: [Overtake    ] Valtteri Bottas has overtaken Andrea Kimi Antonelli for P16.
+Lap 23: [Overtake    ] Max Verstappen has overtaken Carlos Sainz Jr. for P12.
+Lap 24: [Overtake    ] Zhou Guanyu has overtaken Jack Doohan for P18.
+Lap 25: [Overtake    ] Jack Doohan has overtaken Andrea Kimi Antonelli for P18.
+Lap 26: [Overtake    ] Andrea Kimi Antonelli has overtaken Zhou Guanyu for P18.
+Lap 27: [Overtake    ] Zhou Guanyu has overtaken Jack Doohan for P18.
+Lap 28: [Overtake    ] Lewis Hamilton has overtaken Carlos Sainz Jr. for P14.
+Lap 29: [Overtake    ] Carlos Sainz Jr. has overtaken Andrea Kimi Antonelli for P17.
+Lap 30: [Overtake    ] Jack Doohan has overtaken Andrea Kimi Antonelli for P18.
+Lap 31: [Overtake    ] Nico Hulkenberg has overtaken Jack Doohan for P16.
+Lap 32: [Overtake    ] Sergio Pérez has overtaken Valtteri Bottas for P13.
+Lap 33: [Overtake    ] Valtteri Bottas has overtaken Carlos Sainz Jr. for P15.
+Lap 34: [Overtake    ] Charles Leclerc has overtaken Carlos Sainz Jr. for P16.
+Lap 35: [Overtake    ] Carlos Sainz Jr. has overtaken Jack Doohan for P17.
+Lap 36: [Overtake    ] Carlos Sainz Jr. has overtaken Zhou Guanyu for P16.
+Lap 37: [Overtake    ] Alexander Albon has overtaken Liam Lawson for P15.
+Lap 38: [Overtake    ] Liam Lawson has overtaken Zhou Guanyu for P16.
+Lap 39: [Overtake    ] Jack Doohan has overtaken Zhou Guanyu for P17.
+Lap 40: [Overtake    ] Daniel Ricciardo has overtaken Valtteri Bottas for P14.
+Lap 41: [Overtake    ] Andrea Kimi Antonelli has overtaken Zhou Guanyu for P18.
+Lap 42: [Overtake    ] Oscar Piastri has overtaken Charles Leclerc for P13.
+Lap 43: [Overtake    ] Liam Lawson has overtaken Charles Leclerc for P14.
+Lap 44: [Overtake    ] Zhou Guanyu has overtaken Andrea Kimi Antonelli for P18.
+Lap 45: [Overtake    ] Charles Leclerc has overtaken Zhou Guanyu for P17.
+Lap 46: [Overtake    ] Andrea Kimi Antonelli has overtaken Zhou Guanyu for P18.
+Lap 47: [Overtake    ] Max Verstappen has overtaken Yuki Tsunoda for P12.
+Lap 48: [Overtake    ] Yuki Tsunoda has overtaken Jack Doohan for P16.
+Lap 49: [Overtake    ] Jack Doohan has overtaken Andrea Kimi Antonelli for P17.
+Lap 50: [Overtake    ] Charles Leclerc has overtaken Jack Doohan for P15.
+Lap 51: [Overtake    ] Andrea Kimi Antonelli has overtaken Jack Doohan for P17.
+Lap 52: [Overtake    ] Lewis Hamilton has overtaken Nico Hulkenberg for P12.
+Lap 53: [Overtake    ] Zhou Guanyu has overtaken Jack Doohan for P18.
+Lap 54: [Overtake    ] Sergio Pérez has overtaken Carlos Sainz Jr. for P11.
+Lap 55: [Overtake    ] Valtteri Bottas has overtaken Carlos Sainz Jr. for P15.
+Lap 56: [Overtake    ] Carlos Sainz Jr. has overtaken Zhou Guanyu for P17.
+Lap 57: [Overtake    ] Nico Hulkenberg has overtaken Carlos Sainz Jr. for P15.

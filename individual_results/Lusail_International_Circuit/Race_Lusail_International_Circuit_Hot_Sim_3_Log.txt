@@ -1,0 +1,113 @@
+Lap  5: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap  5: [Team Order  ] Team Scuderia Ferrari HP has instructed Charles Leclerc to let Carlos Sainz Jr. pass.
+Lap  5: [Overtake    ] Charles Leclerc has overtaken Andrea Kimi Antonelli for P19.
+Lap  6: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap  6: [Team Order  ] Team McLaren Formula 1  has instructed Lando Norris to let Oscar Piastri pass.
+Lap  6: [Team Order  ] Team Scuderia Ferrari HP has instructed Charles Leclerc to let Carlos Sainz Jr. pass.
+Lap  6: [Overtake    ] George Russell has overtaken Andrea Kimi Antonelli for P19.
+Lap  7: [Overtake    ] Max Verstappen has overtaken George Russell for P1.
+Lap  8: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 10: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 10: [Team Order  ] Team Scuderia Ferrari HP has instructed Carlos Sainz Jr. to let Charles Leclerc pass.
+Lap 11: [Overtake    ] Lando Norris has overtaken Liam Lawson for P11.
+Lap 12: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 12: [Team Order  ] Team McLaren Formula 1  has instructed Lando Norris to let Oscar Piastri pass.
+Lap 12: [Overtake    ] Lewis Hamilton has overtaken Carlos Sainz Jr. for P13.
+Lap 13: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 13: [Overtake    ] Lewis Hamilton has overtaken Andrea Kimi Antonelli for P16.
+Lap 14: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 14: [Overtake    ] Daniel Ricciardo has overtaken Andrea Kimi Antonelli for P16.
+Lap 15: [Team Order  ] Team Williams Racing has instructed Alexander Albon to let Daniel Ricciardo pass.
+Lap 15: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 15: [Overtake    ] George Russell has overtaken Alexander Albon for P8.
+Lap 16: [Team Order  ] Team Williams Racing has instructed Daniel Ricciardo to let Alexander Albon pass.
+Lap 16: [Overtake    ] Charles Leclerc has overtaken Andrea Kimi Antonelli for P17.
+Lap 17: [Team Order  ] Team Williams Racing has instructed Alexander Albon to let Daniel Ricciardo pass.
+Lap 17: [Team Order  ] Team McLaren Formula 1  has instructed Lando Norris to let Oscar Piastri pass.
+Lap 17: [Overtake    ] Lando Norris has overtaken Zhou Guanyu for P18.
+Lap 18: [Team Order  ] Team McLaren Formula 1  has instructed Lando Norris to let Oscar Piastri pass.
+Lap 18: [Team Order  ] Team Scuderia Ferrari HP has instructed Carlos Sainz Jr. to let Charles Leclerc pass.
+Lap 18: [Overtake    ] Oscar Piastri has overtaken Andrea Kimi Antonelli for P15.
+Lap 19: [Team Order  ] Team Scuderia Ferrari HP has instructed Charles Leclerc to let Carlos Sainz Jr. pass.
+Lap 19: [Overtake    ] Lando Norris has overtaken Andrea Kimi Antonelli for P16.
+Lap 20: [Team Order  ] Team Williams Racing has instructed Daniel Ricciardo to let Alexander Albon pass.
+Lap 20: [Overtake    ] Lewis Hamilton has overtaken Andrea Kimi Antonelli for P17.
+Lap 21: [Team Order  ] Team Scuderia Ferrari HP has instructed Carlos Sainz Jr. to let Charles Leclerc pass.
+Lap 21: [Overtake    ] Zhou Guanyu has overtaken Andrea Kimi Antonelli for P18.
+Lap 22: [Overtake    ] Andrea Kimi Antonelli has overtaken Zhou Guanyu for P18.
+Lap 23: [Team Order  ] Team Williams Racing has instructed Alexander Albon to let Daniel Ricciardo pass.
+Lap 23: [Team Order  ] Team Scuderia Ferrari HP has instructed Charles Leclerc to let Carlos Sainz Jr. pass.
+Lap 23: [Overtake    ] Lewis Hamilton has overtaken Andrea Kimi Antonelli for P17.
+Lap 24: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 24: [Overtake    ] Zhou Guanyu has overtaken Andrea Kimi Antonelli for P17.
+Lap 25: [Overtake    ] Lewis Hamilton has overtaken Charles Leclerc for P13.
+Lap 26: [Team Order  ] Team Williams Racing has instructed Daniel Ricciardo to let Alexander Albon pass.
+Lap 26: [Overtake    ] Oscar Piastri has overtaken Lewis Hamilton for P10.
+Lap 27: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 27: [Overtake    ] Liam Lawson has overtaken Charles Leclerc for P16.
+Lap 28: [Overtake    ] Carlos Sainz Jr. has overtaken Zhou Guanyu for P18.
+Lap 29: [Team Order  ] Team Williams Racing has instructed Alexander Albon to let Daniel Ricciardo pass.
+Lap 29: [Overtake    ] Lewis Hamilton has overtaken Daniel Ricciardo for P14.
+Lap 30: [Team Order  ] Team Williams Racing has instructed Alexander Albon to let Daniel Ricciardo pass.
+Lap 30: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 30: [Team Order  ] Team Scuderia Ferrari HP has instructed Charles Leclerc to let Carlos Sainz Jr. pass.
+Lap 30: [Overtake    ] George Russell has overtaken Liam Lawson for P11.
+Lap 31: [Team Order  ] Team Scuderia Ferrari HP has instructed Carlos Sainz Jr. to let Charles Leclerc pass.
+Lap 31: [Overtake    ] Carlos Sainz Jr. has overtaken Charles Leclerc for P17.
+Lap 32: [Overtake    ] Carlos Sainz Jr. has overtaken Zhou Guanyu for P17.
+Lap 33: [Team Order  ] Team Williams Racing has instructed Daniel Ricciardo to let Alexander Albon pass.
+Lap 33: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 33: [Team Order  ] Team Scuderia Ferrari HP has instructed Charles Leclerc to let Carlos Sainz Jr. pass.
+Lap 33: [Overtake    ] Daniel Ricciardo has overtaken Andrea Kimi Antonelli for P15.
+Lap 34: [Team Order  ] Team Scuderia Ferrari HP has instructed Carlos Sainz Jr. to let Charles Leclerc pass.
+Lap 34: [Overtake    ] George Russell has overtaken Daniel Ricciardo for P12.
+Lap 35: [Team Order  ] Team Scuderia Ferrari HP has instructed Charles Leclerc to let Carlos Sainz Jr. pass.
+Lap 35: [Overtake    ] Charles Leclerc has overtaken Zhou Guanyu for P18.
+Lap 36: [Team Order  ] Team Williams Racing has instructed Daniel Ricciardo to let Alexander Albon pass.
+Lap 36: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 36: [Team Order  ] Team Scuderia Ferrari HP has instructed Charles Leclerc to let Carlos Sainz Jr. pass.
+Lap 36: [Overtake    ] George Russell has overtaken Liam Lawson for P12.
+Lap 37: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 37: [Overtake    ] Charles Leclerc has overtaken Carlos Sainz Jr. for P16.
+Lap 38: [Team Order  ] Team Scuderia Ferrari HP has instructed Charles Leclerc to let Carlos Sainz Jr. pass.
+Lap 38: [Overtake    ] Charles Leclerc has overtaken Zhou Guanyu for P18.
+Lap 39: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 39: [Team Order  ] Team Scuderia Ferrari HP has instructed Charles Leclerc to let Carlos Sainz Jr. pass.
+Lap 39: [Overtake    ] Lando Norris has overtaken Valtteri Bottas for P8.
+Lap 40: [Team Order  ] Team Williams Racing has instructed Alexander Albon to let Daniel Ricciardo pass.
+Lap 40: [Team Order  ] Team Scuderia Ferrari HP has instructed Carlos Sainz Jr. to let Charles Leclerc pass.
+Lap 40: [Overtake    ] Carlos Sainz Jr. has overtaken Zhou Guanyu for P18.
+Lap 41: [Team Order  ] Team Williams Racing has instructed Daniel Ricciardo to let Alexander Albon pass.
+Lap 41: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 41: [Overtake    ] Alexander Albon has overtaken Carlos Sainz Jr. for P15.
+Lap 42: [Team Order  ] Team Scuderia Ferrari HP has instructed Carlos Sainz Jr. to let Charles Leclerc pass.
+Lap 42: [Overtake    ] George Russell has overtaken Liam Lawson for P11.
+Lap 43: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 43: [Team Order  ] Team Scuderia Ferrari HP has instructed Charles Leclerc to let Carlos Sainz Jr. pass.
+Lap 44: [Team Order  ] Team Williams Racing has instructed Alexander Albon to let Daniel Ricciardo pass.
+Lap 44: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 44: [Overtake    ] Lewis Hamilton has overtaken George Russell for P11.
+Lap 45: [Team Order  ] Team Williams Racing has instructed Daniel Ricciardo to let Alexander Albon pass.
+Lap 45: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 45: [Overtake    ] Daniel Ricciardo has overtaken Carlos Sainz Jr. for P16.
+Lap 47: [Team Order  ] Team Williams Racing has instructed Daniel Ricciardo to let Alexander Albon pass.
+Lap 47: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 47: [Team Order  ] Team Scuderia Ferrari HP has instructed Charles Leclerc to let Carlos Sainz Jr. pass.
+Lap 47: [Overtake    ] George Russell has overtaken Andrea Kimi Antonelli for P13.
+Lap 48: [Overtake    ] Lewis Hamilton has overtaken Liam Lawson for P11.
+Lap 49: [Overtake    ] Carlos Sainz Jr. has overtaken Zhou Guanyu for P16.
+Lap 50: [Team Order  ] Team Williams Racing has instructed Alexander Albon to let Daniel Ricciardo pass.
+Lap 50: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 50: [Overtake    ] Alexander Albon has overtaken Daniel Ricciardo for P16.
+Lap 51: [Team Order  ] Team Williams Racing has instructed Alexander Albon to let Daniel Ricciardo pass.
+Lap 51: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 51: [Team Order  ] Team Scuderia Ferrari HP has instructed Carlos Sainz Jr. to let Charles Leclerc pass.
+Lap 51: [Overtake    ] Alexander Albon has overtaken Carlos Sainz Jr. for P15.
+Lap 52: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 52: [Team Order  ] Team Scuderia Ferrari HP has instructed Charles Leclerc to let Carlos Sainz Jr. pass.
+Lap 52: [Overtake    ] Charles Leclerc has overtaken Carlos Sainz Jr. for P18.
+Lap 53: [Overtake    ] Daniel Ricciardo has overtaken Charles Leclerc for P16.
+Lap 54: [Overtake    ] Carlos Sainz Jr. has overtaken Zhou Guanyu for P16.
+Lap 55: [Overtake    ] Alexander Albon has overtaken Carlos Sainz Jr. for P15.
+Lap 56: [Overtake    ] Daniel Ricciardo has overtaken Alexander Albon for P14.
+Lap 57: [Overtake    ] Lewis Hamilton has overtaken Liam Lawson for P11.

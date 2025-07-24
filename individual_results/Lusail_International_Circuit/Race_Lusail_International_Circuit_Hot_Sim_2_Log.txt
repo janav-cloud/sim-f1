@@ -1,0 +1,68 @@
+Lap  1: [DNF         ] Lando Norris is out of the race from P1. Reason: Driver Error (Crash).
+Lap  5: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap  5: [Team Order  ] Team BWT Alpine F1  has instructed Esteban Ocon to let Jack Doohan pass.
+Lap  5: [Overtake    ] Esteban Ocon has overtaken Andrea Kimi Antonelli for P18.
+Lap  6: [Team Order  ] Team BWT Alpine F1  has instructed Esteban Ocon to let Jack Doohan pass.
+Lap  7: [Overtake    ] Max Verstappen has overtaken Liam Lawson for P15.
+Lap  8: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap  8: [Overtake    ] Oscar Piastri has overtaken Liam Lawson for P18.
+Lap  9: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap  9: [Overtake    ] Sergio Pérez has overtaken Andrea Kimi Antonelli for P18.
+Lap 10: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 10: [Overtake    ] Liam Lawson has overtaken Andrea Kimi Antonelli for P18.
+Lap 11: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 11: [Overtake    ] Max Verstappen has overtaken Liam Lawson for P18.
+Lap 12: [Overtake    ] Liam Lawson has overtaken Andrea Kimi Antonelli for P18.
+Lap 13: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 13: [Overtake    ] Max Verstappen has overtaken Liam Lawson for P18.
+Lap 14: [Overtake    ] Sergio Pérez has overtaken Esteban Ocon for P16.
+Lap 15: [Overtake    ] Liam Lawson has overtaken Esteban Ocon for P17.
+Lap 16: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 16: [Overtake    ] Yuki Tsunoda has overtaken Andrea Kimi Antonelli for P18.
+Lap 17: [Overtake    ] Yuki Tsunoda has overtaken Esteban Ocon for P16.
+Lap 18: [Overtake    ] Andrea Kimi Antonelli has overtaken Esteban Ocon for P16.
+Lap 19: [Overtake    ] Sergio Pérez has overtaken Zhou Guanyu for P12.
+Lap 21: [Overtake    ] Liam Lawson has overtaken Valtteri Bottas for P12.
+Lap 22: [Overtake    ] Yuki Tsunoda has overtaken Nico Hulkenberg for P12.
+Lap 25: [Overtake    ] Valtteri Bottas has overtaken Nico Hulkenberg for P13.
+Lap 26: [Overtake    ] Esteban Ocon has overtaken Andrea Kimi Antonelli for P16.
+Lap 27: [Overtake    ] Max Verstappen has overtaken Esteban Ocon for P17.
+Lap 28: [Overtake    ] Fernando Alonso has overtaken Andrea Kimi Antonelli for P15.
+Lap 29: [Overtake    ] Max Verstappen has overtaken Andrea Kimi Antonelli for P16.
+Lap 30: [Overtake    ] Esteban Ocon has overtaken Andrea Kimi Antonelli for P17.
+Lap 31: [Overtake    ] Max Verstappen has overtaken Esteban Ocon for P16.
+Lap 32: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 32: [Overtake    ] Nico Hulkenberg has overtaken Andrea Kimi Antonelli for P17.
+Lap 33: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 33: [Overtake    ] Nico Hulkenberg has overtaken Esteban Ocon for P16.
+Lap 34: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 34: [Overtake    ] Max Verstappen has overtaken Nico Hulkenberg for P14.
+Lap 35: [Overtake    ] Sergio Pérez has overtaken Nico Hulkenberg for P15.
+Lap 36: [Overtake    ] Fernando Alonso has overtaken Max Verstappen for P13.
+Lap 37: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 37: [Overtake    ] Sergio Pérez has overtaken Zhou Guanyu for P13.
+Lap 38: [Overtake    ] Max Verstappen has overtaken Zhou Guanyu for P14.
+Lap 39: [Overtake    ] Nico Hulkenberg has overtaken Zhou Guanyu for P15.
+Lap 40: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 40: [Overtake    ] Andrea Kimi Antonelli has overtaken Zhou Guanyu for P16.
+Lap 41: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 41: [Overtake    ] Sergio Pérez has overtaken Daniel Ricciardo for P11.
+Lap 42: [Overtake    ] Max Verstappen has overtaken Daniel Ricciardo for P12.
+Lap 44: [Overtake    ] Max Verstappen has overtaken Alexander Albon for P11.
+Lap 45: [DNF         ] Valtteri Bottas is out of the race from P5. Reason: Driver Error (Crash).
+Lap 45: [Overtake    ] Alexander Albon has overtaken Jack Doohan for P10.
+Lap 46: [Overtake    ] Daniel Ricciardo has overtaken Jack Doohan for P11.
+Lap 47: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 47: [Overtake    ] Nico Hulkenberg has overtaken Jack Doohan for P12.
+Lap 48: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 48: [Overtake    ] Fernando Alonso has overtaken George Russell for P15.
+Lap 49: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 49: [Overtake    ] Fernando Alonso has overtaken Zhou Guanyu for P14.
+Lap 50: [Overtake    ] George Russell has overtaken Zhou Guanyu for P15.
+Lap 51: [Overtake    ] Fernando Alonso has overtaken Andrea Kimi Antonelli for P13.
+Lap 52: [Overtake    ] George Russell has overtaken Andrea Kimi Antonelli for P14.
+Lap 53: [Overtake    ] Andrea Kimi Antonelli has overtaken Esteban Ocon for P16.
+Lap 54: [Overtake    ] George Russell has overtaken Jack Doohan for P13.
+Lap 55: [Overtake    ] Fernando Alonso has overtaken George Russell for P12.
+Lap 56: [Overtake    ] Andrea Kimi Antonelli has overtaken Zhou Guanyu for P15.
+Lap 57: [Overtake    ] Zhou Guanyu has overtaken Andrea Kimi Antonelli for P15.

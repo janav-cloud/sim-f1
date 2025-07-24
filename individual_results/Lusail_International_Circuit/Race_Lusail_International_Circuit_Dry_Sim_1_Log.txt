@@ -1,0 +1,137 @@
+Lap  5: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap  5: [Team Order  ] Team McLaren Formula 1  has instructed Lando Norris to let Oscar Piastri pass.
+Lap  5: [Team Order  ] Team Scuderia Ferrari HP has instructed Charles Leclerc to let Carlos Sainz Jr. pass.
+Lap  5: [Overtake    ] Charles Leclerc has overtaken Andrea Kimi Antonelli for P20.
+Lap  6: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap  6: [Overtake    ] Max Verstappen has overtaken Liam Lawson for P17.
+Lap  7: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap  7: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap  7: [Team Order  ] Team McLaren Formula 1  has instructed Oscar Piastri to let Lando Norris pass.
+Lap  7: [Overtake    ] Max Verstappen has overtaken Liam Lawson for P20.
+Lap  8: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap  8: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap  8: [Team Order  ] Team Scuderia Ferrari HP has instructed Charles Leclerc to let Carlos Sainz Jr. pass.
+Lap  8: [Overtake    ] Max Verstappen has overtaken Andrea Kimi Antonelli for P19.
+Lap  9: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap  9: [Overtake    ] Liam Lawson has overtaken Andrea Kimi Antonelli for P19.
+Lap 10: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 10: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 10: [Overtake    ] George Russell has overtaken Liam Lawson for P15.
+Lap 11: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 11: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 11: [Overtake    ] Yuki Tsunoda has overtaken Andrea Kimi Antonelli for P19.
+Lap 12: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 12: [Team Order  ] Team McLaren Formula 1  has instructed Lando Norris to let Oscar Piastri pass.
+Lap 12: [Overtake    ] Max Verstappen has overtaken Lewis Hamilton for P14.
+Lap 13: [Weather     ] The weather has changed to Hot.
+Lap 13: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 13: [Overtake    ] Sergio Pérez has overtaken Yuki Tsunoda for P16.
+Lap 14: [Overtake    ] Max Verstappen has overtaken Yuki Tsunoda for P16.
+Lap 15: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 15: [Team Order  ] Team McLaren Formula 1  has instructed Oscar Piastri to let Lando Norris pass.
+Lap 15: [Overtake    ] Lewis Hamilton has overtaken Yuki Tsunoda for P17.
+Lap 16: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 16: [Overtake    ] George Russell has overtaken Yuki Tsunoda for P17.
+Lap 17: [Team Order  ] Team McLaren Formula 1  has instructed Lando Norris to let Oscar Piastri pass.
+Lap 17: [Overtake    ] Lando Norris has overtaken George Russell for P16.
+Lap 18: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 18: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 18: [Overtake    ] Oscar Piastri has overtaken Carlos Sainz Jr. for P18.
+Lap 19: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 19: [Overtake    ] Oscar Piastri has overtaken George Russell for P17.
+Lap 20: [Overtake    ] George Russell has overtaken Yuki Tsunoda for P17.
+Lap 21: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 21: [Overtake    ] Oscar Piastri has overtaken George Russell for P15.
+Lap 22: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 22: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 22: [Overtake    ] Oscar Piastri has overtaken Sergio Pérez for P13.
+Lap 23: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 23: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 23: [Team Order  ] Team McLaren Formula 1  has instructed Lando Norris to let Oscar Piastri pass.
+Lap 23: [Overtake    ] Fernando Alonso has overtaken Carlos Sainz Jr. for P17.
+Lap 24: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 24: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 24: [Overtake    ] Fernando Alonso has overtaken Yuki Tsunoda for P16.
+Lap 25: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 25: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 25: [Overtake    ] Fernando Alonso has overtaken Max Verstappen for P12.
+Lap 26: [Overtake    ] Max Verstappen has overtaken Lewis Hamilton for P15.
+Lap 27: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 27: [Team Order  ] Team McLaren Formula 1  has instructed Oscar Piastri to let Lando Norris pass.
+Lap 27: [Overtake    ] Lewis Hamilton has overtaken Yuki Tsunoda for P15.
+Lap 28: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 28: [Overtake    ] Daniel Ricciardo has overtaken Yuki Tsunoda for P16.
+Lap 29: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 29: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 29: [Team Order  ] Team McLaren Formula 1  has instructed Lando Norris to let Oscar Piastri pass.
+Lap 29: [Overtake    ] Max Verstappen has overtaken Daniel Ricciardo for P15.
+Lap 30: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 30: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 30: [Overtake    ] George Russell has overtaken Lewis Hamilton for P16.
+Lap 31: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 31: [Team Order  ] Team McLaren Formula 1  has instructed Oscar Piastri to let Lando Norris pass.
+Lap 31: [Overtake    ] Lando Norris has overtaken Liam Lawson for P7.
+Lap 32: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 32: [Overtake    ] Lewis Hamilton has overtaken Yuki Tsunoda for P15.
+Lap 33: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 33: [Team Order  ] Team McLaren Formula 1  has instructed Lando Norris to let Oscar Piastri pass.
+Lap 33: [Overtake    ] Sergio Pérez has overtaken Daniel Ricciardo for P12.
+Lap 34: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 34: [Team Order  ] Team McLaren Formula 1  has instructed Oscar Piastri to let Lando Norris pass.
+Lap 34: [Overtake    ] Lewis Hamilton has overtaken George Russell for P15.
+Lap 35: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 35: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 35: [Overtake    ] Lando Norris has overtaken Lewis Hamilton for P12.
+Lap 36: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 36: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 36: [Team Order  ] Team McLaren Formula 1  has instructed Oscar Piastri to let Lando Norris pass.
+Lap 36: [Overtake    ] Lewis Hamilton has overtaken Yuki Tsunoda for P15.
+Lap 37: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 37: [Team Order  ] Team McLaren Formula 1  has instructed Lando Norris to let Oscar Piastri pass.
+Lap 37: [Overtake    ] George Russell has overtaken Yuki Tsunoda for P15.
+Lap 38: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 38: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 38: [Team Order  ] Team McLaren Formula 1  has instructed Oscar Piastri to let Lando Norris pass.
+Lap 38: [Overtake    ] Oscar Piastri has overtaken George Russell for P15.
+Lap 39: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 39: [Team Order  ] Team McLaren Formula 1  has instructed Oscar Piastri to let Lando Norris pass.
+Lap 39: [Overtake    ] Lewis Hamilton has overtaken George Russell for P16.
+Lap 40: [Team Order  ] Team McLaren Formula 1  has instructed Lando Norris to let Oscar Piastri pass.
+Lap 40: [Overtake    ] George Russell has overtaken Yuki Tsunoda for P15.
+Lap 41: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 41: [Overtake    ] Lando Norris has overtaken Lewis Hamilton for P14.
+Lap 42: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 42: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 42: [Team Order  ] Team McLaren Formula 1  has instructed Lando Norris to let Oscar Piastri pass.
+Lap 42: [Overtake    ] Lewis Hamilton has overtaken Yuki Tsunoda for P15.
+Lap 43: [Team Order  ] Team BWT Alpine F1  has instructed Esteban Ocon to let Jack Doohan pass.
+Lap 43: [Team Order  ] Team McLaren Formula 1  has instructed Oscar Piastri to let Lando Norris pass.
+Lap 43: [Overtake    ] Lando Norris has overtaken Max Verstappen for P13.
+Lap 44: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 44: [Overtake    ] Oscar Piastri has overtaken Lewis Hamilton for P12.
+Lap 45: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 45: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 45: [Overtake    ] Lewis Hamilton has overtaken Yuki Tsunoda for P16.
+Lap 46: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 46: [Team Order  ] Team McLaren Formula 1  has instructed Oscar Piastri to let Lando Norris pass.
+Lap 46: [Overtake    ] Sergio Pérez has overtaken Max Verstappen for P15.
+Lap 47: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 47: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 47: [Overtake    ] Yuki Tsunoda has overtaken Andrea Kimi Antonelli for P17.
+Lap 48: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 48: [Overtake    ] Max Verstappen has overtaken Carlos Sainz Jr. for P16.
+Lap 49: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 49: [Overtake    ] Yuki Tsunoda has overtaken Carlos Sainz Jr. for P16.
+Lap 50: [Team Order  ] Team McLaren Formula 1  has instructed Lando Norris to let Oscar Piastri pass.
+Lap 50: [Overtake    ] Max Verstappen has overtaken Yuki Tsunoda for P15.
+Lap 51: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 51: [Team Order  ] Team McLaren Formula 1  has instructed Oscar Piastri to let Lando Norris pass.
+Lap 51: [Overtake    ] Sergio Pérez has overtaken Lewis Hamilton for P13.
+Lap 52: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 52: [Team Order  ] Team Oracle Red Bull Racing has instructed Sergio Pérez to let Max Verstappen pass.
+Lap 52: [Overtake    ] Sergio Pérez has overtaken Max Verstappen for P15.
+Lap 53: [Overtake    ] Sergio Pérez has overtaken Lewis Hamilton for P12.
+Lap 54: [Overtake    ] Lando Norris has overtaken Daniel Ricciardo for P9.
+Lap 55: [Overtake    ] Sergio Pérez has overtaken Daniel Ricciardo for P10.
+Lap 56: [Overtake    ] Lewis Hamilton has overtaken George Russell for P12.
+Lap 57: [Overtake    ] Lando Norris has overtaken Nico Hulkenberg for P8.

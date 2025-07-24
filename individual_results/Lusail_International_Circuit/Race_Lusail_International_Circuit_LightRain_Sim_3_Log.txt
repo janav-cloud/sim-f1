@@ -1,0 +1,106 @@
+Lap  1: [Overtake    ] Alexander Albon has overtaken Esteban Ocon for P18.
+Lap  2: [Overtake    ] Alexander Albon has overtaken Andrea Kimi Antonelli for P17.
+Lap  4: [Overtake    ] Max Verstappen has overtaken Alexander Albon for P1.
+Lap  5: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap  5: [Team Order  ] Team Visa Cash App Racing Bulls F1  has instructed Yuki Tsunoda to let Liam Lawson pass.
+Lap  6: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap  6: [Team Order  ] Team Visa Cash App Racing Bulls F1  has instructed Liam Lawson to let Yuki Tsunoda pass.
+Lap  6: [Overtake    ] Lewis Hamilton has overtaken Valtteri Bottas for P13.
+Lap  7: [Overtake    ] Valtteri Bottas has overtaken Andrea Kimi Antonelli for P16.
+Lap  8: [DNF         ] Daniel Ricciardo is out of the race from P18. Reason: Driver Error (Crash).
+Lap  8: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap  8: [Team Order  ] Team Visa Cash App Racing Bulls F1  has instructed Yuki Tsunoda to let Liam Lawson pass.
+Lap  8: [Overtake    ] George Russell has overtaken Valtteri Bottas for P13.
+Lap  9: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap  9: [Team Order  ] Team Visa Cash App Racing Bulls F1  has instructed Liam Lawson to let Yuki Tsunoda pass.
+Lap  9: [Overtake    ] Liam Lawson has overtaken Valtteri Bottas for P16.
+Lap 10: [Team Order  ] Team Visa Cash App Racing Bulls F1  has instructed Liam Lawson to let Yuki Tsunoda pass.
+Lap 10: [Overtake    ] Valtteri Bottas has overtaken Andrea Kimi Antonelli for P16.
+Lap 11: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 11: [Overtake    ] George Russell has overtaken Yuki Tsunoda for P13.
+Lap 12: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 12: [Team Order  ] Team Visa Cash App Racing Bulls F1  has instructed Liam Lawson to let Yuki Tsunoda pass.
+Lap 12: [Overtake    ] George Russell has overtaken Andrea Kimi Antonelli for P16.
+Lap 13: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 13: [Team Order  ] Team Visa Cash App Racing Bulls F1  has instructed Yuki Tsunoda to let Liam Lawson pass.
+Lap 13: [Overtake    ] George Russell has overtaken Liam Lawson for P14.
+Lap 14: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 14: [Overtake    ] Liam Lawson has overtaken Yuki Tsunoda for P13.
+Lap 15: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 15: [Overtake    ] Fernando Alonso has overtaken Andrea Kimi Antonelli for P14.
+Lap 16: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 16: [Overtake    ] Charles Leclerc has overtaken Zhou Guanyu for P18.
+Lap 17: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 17: [Overtake    ] Carlos Sainz Jr. has overtaken Zhou Guanyu for P18.
+Lap 18: [DNF         ] Lance Stroll is out of the race from P14. Reason: Driver Error (Crash).
+Lap 18: [Team Order  ] Team Visa Cash App Racing Bulls F1  has instructed Liam Lawson to let Yuki Tsunoda pass.
+Lap 18: [Overtake    ] Carlos Sainz Jr. has overtaken Charles Leclerc for P16.
+Lap 19: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 19: [Team Order  ] Team Visa Cash App Racing Bulls F1  has instructed Yuki Tsunoda to let Liam Lawson pass.
+Lap 19: [Overtake    ] Carlos Sainz Jr. has overtaken Esteban Ocon for P15.
+Lap 20: [Weather     ] The weather has changed to Heavy Rain.
+Lap 20: [Pit Stop    ] Max Verstappen pits from P13. Stop time: 20.63s. New tires: Wet.
+Lap 20: [Pit Stop    ] Sergio Pérez pits from P2. Stop time: 21.52s. New tires: Wet.
+Lap 20: [Pit Stop    ] Charles Leclerc pits from P17. Stop time: 21.06s. New tires: Wet.
+Lap 20: [Pit Stop    ] Carlos Sainz Jr. pits from P15. Stop time: 21.76s. New tires: Wet.
+Lap 20: [Pit Stop    ] Lewis Hamilton pits from P8. Stop time: 21.25s. New tires: Wet.
+Lap 20: [Pit Stop    ] George Russell pits from P11. Stop time: 21.14s. New tires: Wet.
+Lap 20: [Pit Stop    ] Lando Norris pits from P3. Stop time: 21.24s. New tires: Wet.
+Lap 20: [Pit Stop    ] Oscar Piastri pits from P4. Stop time: 21.34s. New tires: Wet.
+Lap 20: [Pit Stop    ] Fernando Alonso pits from P14. Stop time: 21.49s. New tires: Wet.
+Lap 20: [Pit Stop    ] Esteban Ocon pits from P16. Stop time: 21.01s. New tires: Wet.
+Lap 20: [Pit Stop    ] Jack Doohan pits from P5. Stop time: 21.09s. New tires: Wet.
+Lap 20: [Pit Stop    ] Alexander Albon pits from P1. Stop time: 21.66s. New tires: Wet.
+Lap 20: [Pit Stop    ] Yuki Tsunoda pits from P9. Stop time: 21.30s. New tires: Wet.
+Lap 20: [Pit Stop    ] Nico Hulkenberg pits from P6. Stop time: 21.28s. New tires: Wet.
+Lap 20: [Pit Stop    ] Valtteri Bottas pits from P12. Stop time: 22.05s. New tires: Wet.
+Lap 20: [Pit Stop    ] Zhou Guanyu pits from P18. Stop time: 21.23s. New tires: Wet.
+Lap 20: [Pit Stop    ] Liam Lawson pits from P7. Stop time: 21.47s. New tires: Wet.
+Lap 20: [Pit Stop    ] Andrea Kimi Antonelli pits from P10. Stop time: 21.79s. New tires: Wet.
+Lap 20: [Overtake    ] Charles Leclerc has overtaken Carlos Sainz Jr. for P16.
+Lap 21: [Overtake    ] Fernando Alonso has overtaken Yuki Tsunoda for P12.
+Lap 22: [Weather     ] The weather has changed to Light Rain.
+Lap 22: [Overtake    ] Liam Lawson has overtaken Charles Leclerc for P15.
+Lap 23: [Overtake    ] Charles Leclerc has overtaken Esteban Ocon for P15.
+Lap 24: [Overtake    ] Liam Lawson has overtaken Charles Leclerc for P14.
+Lap 25: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 25: [Overtake    ] Max Verstappen has overtaken Lewis Hamilton for P6.
+Lap 26: [DNF         ] Fernando Alonso is out of the race from P6. Reason: Driver Error (Crash).
+Lap 26: [Overtake    ] Lewis Hamilton has overtaken Andrea Kimi Antonelli for P9.
+Lap 27: [Overtake    ] Yuki Tsunoda has overtaken Jack Doohan for P15.
+Lap 28: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 28: [Overtake    ] Yuki Tsunoda has overtaken Esteban Ocon for P13.
+Lap 29: [Overtake    ] Alexander Albon has overtaken Esteban Ocon for P14.
+Lap 30: [Overtake    ] Alexander Albon has overtaken Yuki Tsunoda for P13.
+Lap 31: [Overtake    ] Alexander Albon has overtaken Liam Lawson for P12.
+Lap 32: [Overtake    ] Liam Lawson has overtaken Carlos Sainz Jr. for P12.
+Lap 33: [Overtake    ] Yuki Tsunoda has overtaken Carlos Sainz Jr. for P13.
+Lap 34: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 34: [Overtake    ] Alexander Albon has overtaken Carlos Sainz Jr. for P12.
+Lap 35: [Overtake    ] George Russell has overtaken Lewis Hamilton for P5.
+Lap 36: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 36: [Overtake    ] Liam Lawson has overtaken Charles Leclerc for P10.
+Lap 37: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed Lewis Hamilton to let George Russell pass.
+Lap 37: [Overtake    ] Alexander Albon has overtaken Charles Leclerc for P11.
+Lap 38: [Team Order  ] Team Mercedes-AMG Petronas F1  has instructed George Russell to let Lewis Hamilton pass.
+Lap 38: [Overtake    ] Jack Doohan has overtaken Esteban Ocon for P14.
+Lap 39: [Overtake    ] Yuki Tsunoda has overtaken Esteban Ocon for P15.
+Lap 40: [DNF         ] Lewis Hamilton is out of the race from P5. Reason: Driver Error (Crash).
+Lap 40: [Overtake    ] George Russell has overtaken Nico Hulkenberg for P4.
+Lap 41: [Overtake    ] Max Verstappen has overtaken Alexander Albon for P9.
+Lap 42: [Overtake    ] Carlos Sainz Jr. has overtaken Charles Leclerc for P11.
+Lap 43: [Overtake    ] Max Verstappen has overtaken Liam Lawson for P8.
+Lap 44: [Weather     ] The weather has changed to Heavy Rain.
+Lap 44: [Overtake    ] Max Verstappen has overtaken Charles Leclerc for P10.
+Lap 45: [Overtake    ] Max Verstappen has overtaken Carlos Sainz Jr. for P11.
+Lap 46: [Overtake    ] Yuki Tsunoda has overtaken Jack Doohan for P13.
+Lap 47: [Overtake    ] Yuki Tsunoda has overtaken Esteban Ocon for P14.
+Lap 48: [DNF         ] Andrea Kimi Antonelli is out of the race from P7. Reason: Driver Error (Crash).
+Lap 48: [Overtake    ] Yuki Tsunoda has overtaken Jack Doohan for P12.
+Lap 49: [Overtake    ] Max Verstappen has overtaken Carlos Sainz Jr. for P9.
+Lap 50: [Overtake    ] Oscar Piastri has overtaken Nico Hulkenberg for P3.
+Lap 51: [Weather     ] The weather has changed to Light Rain.
+Lap 51: [Overtake    ] Alexander Albon has overtaken Liam Lawson for P6.
+Lap 52: [Overtake    ] Sergio Pérez has overtaken Nico Hulkenberg for P4.
+Lap 53: [Overtake    ] Lando Norris has overtaken George Russell for P1.
+Lap 54: [Overtake    ] Oscar Piastri has overtaken George Russell for P2.

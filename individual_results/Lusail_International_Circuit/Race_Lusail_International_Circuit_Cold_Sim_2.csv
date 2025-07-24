@@ -1,0 +1,21 @@
+Position,Driver,Team,Points,Status
+1,George Russell,Mercedes-AMG Petronas F1 ,25,Finished
+2,Lando Norris,McLaren Formula 1 ,18,Finished
+3,Lance Stroll,Aston Martin Aramco F1 ,15,Finished
+4,Lewis Hamilton,Mercedes-AMG Petronas F1 ,12,Finished
+5,Charles Leclerc,Scuderia Ferrari HP,10,Finished
+6,Max Verstappen,Oracle Red Bull Racing,8,Finished
+7,Oscar Piastri,McLaren Formula 1 ,6,Finished
+8,Liam Lawson,Visa Cash App Racing Bulls F1 ,4,Finished
+9,Yuki Tsunoda,Visa Cash App Racing Bulls F1 ,2,Finished
+10,Esteban Ocon,BWT Alpine F1 ,1,Finished
+11,Zhou Guanyu,MoneyGram Haas F1 ,0,Finished
+12,Daniel Ricciardo,Williams Racing,0,Finished
+13,Alexander Albon,Williams Racing,0,Finished
+14,Nico Hulkenberg,Stake F1 Kick Sauber,0,Finished
+15,Sergio Pérez,Oracle Red Bull Racing,0,Finished
+16,Valtteri Bottas,Stake F1 Kick Sauber,0,Driver Error (Crash)
+17,Carlos Sainz Jr.,Scuderia Ferrari HP,0,Driver Error (Crash)
+18,Fernando Alonso,Aston Martin Aramco F1 ,0,Driver Error (Crash)
+19,Andrea Kimi Antonelli,MoneyGram Haas F1 ,0,Driver Error (Crash)
+20,Jack Doohan,BWT Alpine F1 ,0,Driver Error (Crash)

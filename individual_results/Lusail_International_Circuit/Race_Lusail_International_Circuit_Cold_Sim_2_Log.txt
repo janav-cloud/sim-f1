@@ -1,0 +1,68 @@
+Lap  4: [Overtake    ] Fernando Alonso has overtaken Liam Lawson for P18.
+Lap  5: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap  5: [Overtake    ] Liam Lawson has overtaken Esteban Ocon for P19.
+Lap  6: [Overtake    ] Max Verstappen has overtaken Andrea Kimi Antonelli for P16.
+Lap  7: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap  7: [Overtake    ] Lando Norris has overtaken Jack Doohan for P16.
+Lap  8: [Team Order  ] Team BWT Alpine F1  has instructed Jack Doohan to let Esteban Ocon pass.
+Lap  8: [Overtake    ] Lando Norris has overtaken Andrea Kimi Antonelli for P15.
+Lap  9: [Overtake    ] Max Verstappen has overtaken Zhou Guanyu for P14.
+Lap 10: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 10: [Overtake    ] Max Verstappen has overtaken Valtteri Bottas for P14.
+Lap 11: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 11: [Team Order  ] Team BWT Alpine F1  has instructed Esteban Ocon to let Jack Doohan pass.
+Lap 11: [Overtake    ] Max Verstappen has overtaken Nico Hulkenberg for P13.
+Lap 12: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 12: [Overtake    ] Alexander Albon has overtaken Valtteri Bottas for P18.
+Lap 13: [Overtake    ] Valtteri Bottas has overtaken Esteban Ocon for P19.
+Lap 14: [DNF         ] Jack Doohan is out of the race from P19. Reason: Driver Error (Crash).
+Lap 14: [Overtake    ] Yuki Tsunoda has overtaken Valtteri Bottas for P17.
+Lap 15: [Overtake    ] Oscar Piastri has overtaken Valtteri Bottas for P17.
+Lap 16: [Overtake    ] Oscar Piastri has overtaken Alexander Albon for P16.
+Lap 17: [DNF         ] Andrea Kimi Antonelli is out of the race from P9. Reason: Driver Error (Crash).
+Lap 17: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 17: [Overtake    ] Alexander Albon has overtaken Yuki Tsunoda for P15.
+Lap 18: [Overtake    ] Yuki Tsunoda has overtaken Liam Lawson for P15.
+Lap 19: [Overtake    ] Oscar Piastri has overtaken Alexander Albon for P13.
+Lap 20: [Overtake    ] Sergio Pérez has overtaken Esteban Ocon for P15.
+Lap 21: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 21: [Overtake    ] Valtteri Bottas has overtaken Esteban Ocon for P16.
+Lap 22: [Overtake    ] Sergio Pérez has overtaken Daniel Ricciardo for P13.
+Lap 23: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 23: [Overtake    ] Sergio Pérez has overtaken Daniel Ricciardo for P16.
+Lap 24: [Overtake    ] Max Verstappen has overtaken Daniel Ricciardo for P16.
+Lap 25: [Team Order  ] Team Oracle Red Bull Racing has instructed Max Verstappen to let Sergio Pérez pass.
+Lap 25: [Overtake    ] Max Verstappen has overtaken Sergio Pérez for P17.
+Lap 26: [Overtake    ] Max Verstappen has overtaken Daniel Ricciardo for P15.
+Lap 27: [Overtake    ] Max Verstappen has overtaken Esteban Ocon for P14.
+Lap 28: [Overtake    ] Fernando Alonso has overtaken Max Verstappen for P13.
+Lap 29: [Overtake    ] Fernando Alonso has overtaken Valtteri Bottas for P12.
+Lap 30: [DNF         ] Fernando Alonso is out of the race from P12. Reason: Driver Error (Crash).
+Lap 30: [Overtake    ] Max Verstappen has overtaken Valtteri Bottas for P12.
+Lap 31: [Overtake    ] Max Verstappen has overtaken Alexander Albon for P11.
+Lap 32: [Overtake    ] Max Verstappen has overtaken Yuki Tsunoda for P9.
+Lap 33: [Overtake    ] Liam Lawson has overtaken Yuki Tsunoda for P10.
+Lap 34: [Overtake    ] Max Verstappen has overtaken Liam Lawson for P9.
+Lap 35: [Overtake    ] Oscar Piastri has overtaken Lando Norris for P8.
+Lap 36: [Overtake    ] Lando Norris has overtaken Max Verstappen for P8.
+Lap 37: [DNF         ] Carlos Sainz Jr. is out of the race from P2. Reason: Driver Error (Crash).
+Lap 37: [Overtake    ] Lando Norris has overtaken Zhou Guanyu for P5.
+Lap 38: [DNF         ] Valtteri Bottas is out of the race from P11. Reason: Driver Error (Crash).
+Lap 38: [Overtake    ] Yuki Tsunoda has overtaken Liam Lawson for P9.
+Lap 39: [Overtake    ] Oscar Piastri has overtaken Zhou Guanyu for P6.
+Lap 40: [Overtake    ] Liam Lawson has overtaken Yuki Tsunoda for P9.
+Lap 41: [Overtake    ] Max Verstappen has overtaken Liam Lawson for P7.
+Lap 42: [Overtake    ] Esteban Ocon has overtaken Zhou Guanyu for P10.
+Lap 43: [Overtake    ] Oscar Piastri has overtaken Lando Norris for P5.
+Lap 44: [Overtake    ] Zhou Guanyu has overtaken Esteban Ocon for P10.
+Lap 45: [Overtake    ] Esteban Ocon has overtaken Zhou Guanyu for P10.
+Lap 46: [Overtake    ] Lando Norris has overtaken Lance Stroll for P5.
+Lap 47: [Overtake    ] Lance Stroll has overtaken George Russell for P5.
+Lap 50: [Overtake    ] George Russell has overtaken Lewis Hamilton for P5.
+Lap 51: [Overtake    ] Lewis Hamilton has overtaken Charles Leclerc for P5.
+Lap 52: [Overtake    ] Yuki Tsunoda has overtaken Zhou Guanyu for P10.
+Lap 53: [Overtake    ] Yuki Tsunoda has overtaken Esteban Ocon for P9.
+Lap 54: [Overtake    ] Zhou Guanyu has overtaken Esteban Ocon for P10.
+Lap 55: [Overtake    ] Oscar Piastri has overtaken Lewis Hamilton for P3.
+Lap 56: [Overtake    ] Esteban Ocon has overtaken Zhou Guanyu for P10.
+Lap 57: [Overtake    ] Yuki Tsunoda has overtaken Esteban Ocon for P9.
