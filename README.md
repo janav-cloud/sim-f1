@@ -59,3 +59,5 @@ Ensure TEAM DATA.csv, DRIVERS DATA.csv, and CALCULATIONS.csv are in the root dir
 
 ### 🧠 Credits
 Developed for F1 simulation and strategy modeling. Data and structure are customizable for other motorsport formats.
+
+### Made with Love by Janav Dua! 💌
