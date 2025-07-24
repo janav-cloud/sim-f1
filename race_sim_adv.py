@@ -2,13 +2,19 @@ import pandas as pd
 import random
 import math
 from collections import Counter
-import os # NEW: Import os module for path operations
+import os
 
 # --- 1. Modular Data Imports ---
 from circuit_data import CIRCUIT_DATA
 from weather_conditions import WEATHER_CONDITIONS
 from race_strategy import RACE_STRATEGY_TYPES
 from weather_transitions import WEATHER_TRANSITIONS
+# NEW: Import new modules for enhanced features
+from ers_management import ERS_MODES, manage_ers 
+from track_evolution import TrackState
+from team_orders import check_for_team_orders
+# NEW: Import the race logger
+from race_logger import RaceLogger
 
 # --- 2. Data Loading Function ---
 def load_csv_data(filepath):
@@ -70,6 +76,9 @@ class RaceEntry:
         self.has_graining = False
         self.has_minor_damage = False
         self.damage_penalty_factor = 1.0
+        self.ers_charge = 1.0
+        self.ers_mode = ERS_MODES['Standard']
+        self.ers_deployment_lap = 0
 
         acumen_map = {
             "strategy_aggressive_acumen": self.strategy_aggressive_acumen,
@@ -92,17 +101,18 @@ def calculate_base_lap_time(circuit):
     """Calculates a reference lap time based on circuit length."""
     return circuit['length_km'] * 38
 
-def calculate_lap_time(entry, circuit, weather, enhanced_simulation=False, weather_changed=False):
+def calculate_lap_time(entry, circuit, weather, enhanced_simulation=False, weather_changed=False, track_grip_bonus=0.0, ers_power_boost=0.0):
     """
     Calculates the time for a single lap for a given entry.
-    Enhanced simulation adds dynamic weather effects, tire compound impact, and adaptability.
     """
     base_time = calculate_base_lap_time(circuit)
     speed_weight = circuit['straight_speed_importance']
     cornering_weight = circuit['cornering_importance']
     braking_weight = circuit['braking_demands']
     total_weight = speed_weight + cornering_weight + braking_weight
-    effective_hp = entry.car_engine_hp_final * weather['hp_multiplier']
+    
+    effective_hp = (entry.car_engine_hp_final + ers_power_boost) * weather['hp_multiplier']
+    
     effective_downforce = entry.car_chassis_aero_df_final * weather['downforce_multiplier']
     straight_line_performance = (effective_hp * 0.7) + (entry.car_chassis_aero_dr_final * 0.3)
     perf_score = (
@@ -115,7 +125,8 @@ def calculate_lap_time(entry, circuit, weather, enhanced_simulation=False, weath
     adjusted_time *= driver_skill_modifier
     grip_penalty = 1.0 - weather['grip_multiplier']
     mitigation = grip_penalty * (entry.driver_wet_weather_ability * 0.5)
-    effective_grip_multiplier = weather['grip_multiplier'] + mitigation
+    
+    effective_grip_multiplier = weather['grip_multiplier'] + mitigation + track_grip_bonus
 
     if enhanced_simulation:
         if weather_changed:
@@ -234,14 +245,21 @@ def decide_pit_stop(entry, circuit, lap, is_safety_car, enhanced_simulation=Fals
 
     return False
 
-def simulate_pit_stop(entry, enhanced_simulation=False, current_weather_name='Dry', circuit=None):
-    """Simulates a pit stop, adding time and resetting tire wear, and choosing new tires."""
+def simulate_pit_stop(entry, lap, logger, enhanced_simulation=False, current_weather_name='Dry', circuit=None):
+    """Simulates a pit stop, adding time, resetting tire wear, and choosing new tires."""
     base_time = 23.0
     time_reduction = entry.team_pit_stop_speed * 2.0
     pit_stop_time = base_time - time_reduction
     if enhanced_simulation:
-        pit_stop_variability = random.uniform(-0.5, 0.5)
-        pit_stop_time += pit_stop_variability
+        pit_error_chance = 0.03 * (1 - entry.team_pit_stop_speed)
+        if random.random() < pit_error_chance:
+            error_time = random.uniform(1.5, 5.0)
+            pit_stop_time += error_time
+            logger.log_pit_error(lap, entry, error_time)
+        else:
+            pit_stop_variability = random.uniform(-0.5, 0.5)
+            pit_stop_time += pit_stop_variability
+            
     entry.total_race_time_s += pit_stop_time
     entry.pit_stops_made += 1
     entry.tire_wear = 0.0
@@ -264,7 +282,7 @@ def simulate_pit_stop(entry, enhanced_simulation=False, current_weather_name='Dr
             if remaining_laps < 10:
                 new_compound = random.choices(['soft', 'medium'], weights=[0.7, 0.3], k=1)[0]
             elif remaining_laps > 30 and entry.tire_wear < 0.2:
-                 new_compound = random.choices(['medium', 'hard'], weights=[0.6, 0.4], k=1)[0]
+                new_compound = random.choices(['medium', 'hard'], weights=[0.6, 0.4], k=1)[0]
             elif entry.tire_wear > 0.7:
                 new_compound = random.choices(['medium', 'hard'], weights=[0.6, 0.4], k=1)[0]
             else:
@@ -273,9 +291,12 @@ def simulate_pit_stop(entry, enhanced_simulation=False, current_weather_name='Dr
             new_compound = random.choices(compounds, weights=[strategy_pref[c] for c in compounds], k=1)[0]
 
     entry.current_tire_compound = new_compound
+    
+    logger.log_pit_stop(lap, entry, pit_stop_time, new_compound)
+    
     return pit_stop_time
 
-def simulate_event(entry, weather, enhanced_simulation=False):
+def simulate_event(entry, lap, logger, weather, enhanced_simulation=False):
     """Simulates random events like mechanical failures and driver errors."""
     if entry.is_dnf: return
 
@@ -307,6 +328,7 @@ def simulate_event(entry, weather, enhanced_simulation=False):
         else:
             entry.dnf_reason = "Mechanical Failure"
         entry.is_dnf = True
+        logger.log_dnf(lap, entry)
         return
 
     error_chance = 0.001 * (1.5 - entry.driver_consistency) + weather['driver_error_chance_modifier']
@@ -322,6 +344,7 @@ def simulate_event(entry, weather, enhanced_simulation=False):
         if incident_type_roll < 0.05:
             entry.is_dnf = True
             entry.dnf_reason = "Driver Error (Crash)"
+            logger.log_dnf(lap, entry)
         elif incident_type_roll < 0.2:
             entry.total_race_time_s += random.uniform(5.0, 10.0)
         else:
@@ -356,6 +379,11 @@ def check_for_overtake(front_entry, rear_entry, circuit, time_diff, enhanced_sim
         
         if rear_entry.assigned_strategy_type.get('name', '').lower().startswith('aggressive'):
             overtake_prob += 0.02
+            
+        if rear_entry.ers_mode['name'] == 'Overtake':
+            overtake_prob += 0.15
+        if front_entry.ers_mode['name'] == 'Defend':
+            overtake_prob -= 0.10
 
     return random.random() < max(0.0, min(1.0, overtake_prob))
 
@@ -373,22 +401,30 @@ def simulate_race(circuit, weather, entries, enhanced_simulation=False):
         entry.has_graining = False
         entry.has_minor_damage = False
         entry.damage_penalty_factor = 1.0
+        entry.ers_charge = 1.0
+        entry.ers_mode = ERS_MODES['Standard']
+        entry.ers_deployment_lap = 0
 
     safety_car_laps = 0
     current_weather = weather.copy()
     current_weather_name = weather['name']
+    
+    track_state = TrackState()
+    logger = RaceLogger()
 
     print(f"\n--- Simulating Race at {circuit['name']} with initial {current_weather_name} conditions ---")
 
     for lap in range(1, circuit['laps'] + 1):
         is_safety_car_deployed_this_lap = False
         if safety_car_laps == 0 and lap > 2 and lap < circuit['laps'] - 5:
+            non_dnf_incident_chance = 0.005 
             dnf_occurred_last_lap = any(e.laps_completed == lap - 1 and e.is_dnf for e in entries)
-            if dnf_occurred_last_lap:
+            if dnf_occurred_last_lap or random.random() < non_dnf_incident_chance:
                 sc_probability = 0.6 if circuit.get('track_type') == 'Street Circuit' else 0.4
                 if random.random() < sc_probability:
                     is_safety_car_deployed_this_lap = True
                     safety_car_laps = random.randint(2, 4)
+                    logger.log_safety_car(lap)
 
         is_safety_car_active = safety_car_laps > 0
         weather_changed_this_lap = False
@@ -412,18 +448,43 @@ def simulate_race(circuit, weather, entries, enhanced_simulation=False):
                         current_weather = WEATHER_CONDITIONS[new_weather_name].copy()
                         current_weather_name = new_weather_name
                         weather_changed_this_lap = True
+                        track_state.handle_weather_change(current_weather_name)
+                        logger.log_weather_change(lap, new_weather_name)
+
+        track_state.update_rubber(len([e for e in entries if not e.is_dnf]))
+        track_grip_bonus = track_state.get_grip_bonus() if enhanced_simulation else 0.0
+
+        live_race_order = sorted([e for e in entries if not e.is_dnf], key=lambda x: x.total_race_time_s)
+
+        for i, entry in enumerate(live_race_order):
+            if entry.is_dnf: continue
+            
+            if enhanced_simulation:
+                front_car = live_race_order[i-1] if i > 0 else None
+                rear_car = live_race_order[i+1] if i < len(live_race_order) - 1 else None
+                time_to_front = entry.total_race_time_s - front_car.total_race_time_s if front_car else float('inf')
+                time_to_rear = rear_car.total_race_time_s - entry.total_race_time_s if rear_car else float('inf')
+                manage_ers(entry, lap, time_to_front, time_to_rear)
 
         for entry in entries:
             if entry.is_dnf: continue
 
-            simulate_event(entry, current_weather, enhanced_simulation)
+            simulate_event(entry, lap, logger, current_weather, enhanced_simulation)
             if entry.is_dnf: continue
 
             if decide_pit_stop(entry, circuit, lap, is_safety_car_active, enhanced_simulation, current_weather_name):
-                simulate_pit_stop(entry, enhanced_simulation, current_weather_name, circuit)
+                simulate_pit_stop(entry, lap, logger, enhanced_simulation, current_weather_name, circuit)
 
-            lap_time = calculate_lap_time(entry, circuit, current_weather, enhanced_simulation, weather_changed_this_lap)
+            ers_boost = entry.ers_mode['power_boost'] if enhanced_simulation else 0.0
+            lap_time = calculate_lap_time(entry, circuit, current_weather, enhanced_simulation, weather_changed_this_lap, track_grip_bonus, ers_boost)
             
+            leader_laps = max(e.laps_completed for e in entries)
+            if entry.laps_completed < leader_laps -1:
+                time_to_leader = entry.total_race_time_s - live_race_order[0].total_race_time_s
+                if time_to_leader > 0 and time_to_leader < 5: 
+                    lap_time *= 1.02 
+                    logger.log_blue_flag(lap, entry)
+
             if is_safety_car_active:
                 lap_time = calculate_base_lap_time(circuit) * 1.4 + random.uniform(-0.5, 0.5)
 
@@ -433,6 +494,7 @@ def simulate_race(circuit, weather, entries, enhanced_simulation=False):
         if is_safety_car_active:
             safety_car_laps -= 1
             if safety_car_laps == 0:
+                logger.log_safety_car_ends(lap)
                 active_cars = sorted([e for e in entries if not e.is_dnf], key=lambda x: x.total_race_time_s)
                 if active_cars:
                     leader_time = active_cars[0].total_race_time_s
@@ -442,6 +504,17 @@ def simulate_race(circuit, weather, entries, enhanced_simulation=False):
         live_race_order = sorted([e for e in entries if not e.is_dnf], key=lambda x: x.total_race_time_s)
         for i, entry in enumerate(live_race_order):
             entry.current_position = i + 1
+            
+        if enhanced_simulation and not is_safety_car_active:
+            teams = {e.team_name for e in live_race_order}
+            for team in teams:
+                team_drivers = [e for e in live_race_order if e.team_name == team]
+                if len(team_drivers) == 2:
+                    team_drivers.sort(key=lambda x: x.current_position)
+                    if check_for_team_orders(team_drivers[0], team_drivers[1], lap, circuit['laps'], logger):
+                        time_swap_diff = team_drivers[1].total_race_time_s - team_drivers[0].total_race_time_s
+                        team_drivers[0].total_race_time_s += time_swap_diff + 0.1
+                        live_race_order.sort(key=lambda x: x.total_race_time_s)
 
         for i in range(len(live_race_order) - 1, 0, -1):
             rear_entry, front_entry = live_race_order[i], live_race_order[i-1]
@@ -449,20 +522,26 @@ def simulate_race(circuit, weather, entries, enhanced_simulation=False):
             
             if 0 < time_difference < 1.2: 
                 if check_for_overtake(front_entry, rear_entry, circuit, time_difference, enhanced_simulation):
+                    logger.log_overtake(lap, rear_entry, front_entry)
                     overtake_time_swing = random.uniform(0.1, 0.3)
-                    
-                    rear_entry.total_race_time_s = front_entry.total_race_time_s - overtake_time_swing
-                    front_entry.total_race_time_s = front_entry.total_race_time_s + overtake_time_swing
+                    original_front_time = front_entry.total_race_time_s
+                    rear_entry.total_race_time_s = original_front_time - overtake_time_swing
+                    front_entry.total_race_time_s = original_front_time + overtake_time_swing
                     
                     live_race_order.sort(key=lambda x: x.total_race_time_s)
-                    for idx, entry_sorted in enumerate(live_race_order):
-                        entry_sorted.current_position = idx + 1
-                    i = len(live_race_order)
+                    break 
 
-    final_results = sorted(entries, key=lambda x: (x.is_dnf, -x.laps_completed, x.total_race_time_s))
+        for idx, entry_sorted in enumerate(live_race_order):
+            entry_sorted.current_position = idx + 1
+
+    non_dnf = sorted([e for e in entries if not e.is_dnf], key=lambda x: x.total_race_time_s)
+    dnf = sorted([e for e in entries if e.is_dnf], key=lambda x: (-x.laps_completed, x.total_race_time_s))
+    
+    final_results = non_dnf + dnf
     for i, entry in enumerate(final_results):
         entry.current_position = i + 1
-    return final_results
+        
+    return final_results, logger.logs
 
 def assign_points(position):
     """Assigns F1 points based on finishing position."""
@@ -485,14 +564,13 @@ def generate_final_race_result(final_results):
     result_df = pd.DataFrame(result_data)
     return result_df
 
-def run_monte_carlo_simulation(num_simulations, circuit, weather, race_entries_template, enhanced_simulation=False, race_results_output_dir=None):
+def run_monte_carlo_simulation(num_simulations, circuit, weather, race_entries_template, enhanced_simulation=False, race_results_output_dir=None, show_logs=False, save_logs=False):
     """Runs the race simulation multiple times for a specific weather condition."""
     print(f"\n--- Running {num_simulations} simulations for {weather['name']} conditions at {circuit['name']} ---")
     all_simulation_results = []
     
     if race_results_output_dir:
-        # Create circuit-specific subdirectory
-        circuit_specific_dir = os.path.join(race_results_output_dir, circuit['name'].replace(' ', '_')) # Replace spaces for valid folder name
+        circuit_specific_dir = os.path.join(race_results_output_dir, circuit['name'].replace(' ', '_'))
         os.makedirs(circuit_specific_dir, exist_ok=True)
         print(f"Individual race results for {circuit['name']} will be saved to: {circuit_specific_dir}")
 
@@ -501,47 +579,34 @@ def run_monte_carlo_simulation(num_simulations, circuit, weather, race_entries_t
         sim_entries = []
         for entry_template in race_entries_template:
             driver_data_copy = {
-                'driver_name': entry_template.driver_name,
-                'skill': entry_template.driver_skill,
-                'consistency': entry_template.driver_consistency,
-                'tire_management': entry_template.driver_tire_management,
-                'wet_weather_ability': entry_template.driver_wet_weather_ability,
-                'overtaking_skill': entry_template.driver_overtaking_skill,
-                'defending_skill': entry_template.driver_defending_skill,
-                'team_name': entry_template.team_name
+                'driver_name': entry_template.driver_name, 'skill': entry_template.driver_skill,
+                'consistency': entry_template.driver_consistency, 'tire_management': entry_template.driver_tire_management,
+                'wet_weather_ability': entry_template.driver_wet_weather_ability, 'overtaking_skill': entry_template.driver_overtaking_skill,
+                'defending_skill': entry_template.driver_defending_skill, 'team_name': entry_template.team_name
             }
             team_data_copy = {
-                'team_name': entry_template.team_name,
-                'team_pit_stop_speed': entry_template.team_pit_stop_speed,
-                'team_strategy_acumen': entry_template.team_strategy_acumen_base,
-                'strategy_aggressive_acumen': entry_template.strategy_aggressive_acumen,
-                'strategy_balanced_acumen': entry_template.strategy_balanced_acumen,
-                'strategy_conservative_acumen': entry_template.strategy_conservative_acumen
+                'team_name': entry_template.team_name, 'team_pit_stop_speed': entry_template.team_pit_stop_speed,
+                'team_strategy_acumen': entry_template.team_strategy_acumen_base, 'strategy_aggressive_acumen': entry_template.strategy_aggressive_acumen,
+                'strategy_balanced_acumen': entry_template.strategy_balanced_acumen, 'strategy_conservative_acumen': entry_template.strategy_conservative_acumen
             }
             car_scores_copy = {
-                'Overall_Car_Score': entry_template.car_overall_score,
-                'Engine_HP_Final': entry_template.car_engine_hp_final,
-                'Engine_REL_Final': entry_template.car_engine_rel_final,
-                'ChassisAero_DF_Final': entry_template.car_chassis_aero_df_final,
-                'ChassisAero_DR_Final': entry_template.car_chassis_aero_dr_final,
-                'Brakes_SP_Final': entry_template.car_brakes_sp_final,
-                'Brakes_DUR_Final': entry_template.car_brakes_dur_final,
-                'Tires_WR_Final': entry_template.car_tires_wr_final
+                'Overall_Car_Score': entry_template.car_overall_score, 'Engine_HP_Final': entry_template.car_engine_hp_final,
+                'Engine_REL_Final': entry_template.car_engine_rel_final, 'ChassisAero_DF_Final': entry_template.car_chassis_aero_df_final,
+                'ChassisAero_DR_Final': entry_template.car_chassis_aero_dr_final, 'Brakes_SP_Final': entry_template.car_brakes_sp_final,
+                'Brakes_DUR_Final': entry_template.car_brakes_dur_final, 'Tires_WR_Final': entry_template.car_tires_wr_final
             }
-            
             assigned_strategy = random.choice(RACE_STRATEGY_TYPES)
-            
             new_entry = RaceEntry(driver_data_copy, team_data_copy, car_scores_copy, 0, assigned_strategy)
             sim_entries.append(new_entry)
 
-
+        # Grid is now randomized
         initial_grid_positions = list(range(1, len(sim_entries) + 1))
         random.shuffle(initial_grid_positions)
-
         for i, entry in enumerate(sim_entries):
             entry.initial_position = initial_grid_positions[i]
             entry.current_position = initial_grid_positions[i]
-            
+
+        for i, entry in enumerate(sim_entries):
             if enhanced_simulation:
                 compounds = ['soft', 'medium', 'hard']
                 tire_type = weather.get('tire_type_recommendation', 'dry')
@@ -555,19 +620,33 @@ def run_monte_carlo_simulation(num_simulations, circuit, weather, race_entries_t
             else:
                 entry.current_tire_compound = 'medium'
 
-        simulation_results = simulate_race(circuit, weather, sim_entries, enhanced_simulation)
+        simulation_results, race_logs = simulate_race(circuit, weather, sim_entries, enhanced_simulation)
         race_result_df = generate_final_race_result(simulation_results)
         
         print(f"\n--- Race Result for Simulation {sim_num + 1} ({weather['name']} conditions) ---")
         print(race_result_df.to_string(index=False))
 
-        # NEW: Save individual race result CSV to circuit-specific subdirectory
+        if show_logs:
+            print("\n--- Race Log ---")
+            for log_entry in race_logs:
+                print(f"Lap {log_entry['lap']:>2}: [{log_entry['type']:<12}] {log_entry['message']}")
+
         if race_results_output_dir:
             circuit_folder_name = circuit['name'].replace(' ', '_')
+            
             race_filename = f"Race_{circuit_folder_name}_{weather['name'].replace(' ', '')}_Sim_{sim_num + 1}.csv"
             race_filepath = os.path.join(race_results_output_dir, circuit_folder_name, race_filename)
             race_result_df.to_csv(race_filepath, index=False)
             print(f"Individual race result saved to {race_filepath}")
+
+            if save_logs:
+                log_filename = f"Race_{circuit_folder_name}_{weather['name'].replace(' ', '')}_Sim_{sim_num + 1}_Log.txt"
+                log_filepath = os.path.join(race_results_output_dir, circuit_folder_name, log_filename)
+                with open(log_filepath, 'w') as f:
+                    for log_entry in race_logs:
+                        f.write(f"Lap {log_entry['lap']:>2}: [{log_entry['type']:<12}] {log_entry['message']}\n")
+                print(f"Individual race log saved to {log_filepath}")
+
 
         all_simulation_results.append([e.__dict__.copy() for e in simulation_results])
     return all_simulation_results
@@ -575,11 +654,9 @@ def run_monte_carlo_simulation(num_simulations, circuit, weather, race_entries_t
 def aggregate_results(all_simulation_results, all_drivers):
     """Aggregates results from all simulations into a final summary DataFrame."""
     driver_stats = {d['driver_name']: {
-        'total_points': 0,
-        'dnf_count': 0,
+        'total_points': 0, 'dnf_count': 0,
         'finishing_positions': {pos: 0 for pos in range(1, len(all_drivers) + 2)}, 
-        'team_name': d.get('team_name', 'N/A'),
-        'position_counts': []
+        'team_name': d.get('team_name', 'N/A'), 'position_counts': []
     } for d in all_drivers}
 
     num_sims = len(all_simulation_results)
@@ -609,12 +686,9 @@ def aggregate_results(all_simulation_results, all_drivers):
         mode_count = position_counts[mode_position] if position_counts else 0
 
         result = {
-            'Driver': driver_name,
-            'Team': stats['team_name'],
-            'Mode Position': mode_position,
-            'Mode Count': mode_count,
-            'Avg Points': avg_points,
-            'DNF Rate (%)': f"{dnf_rate:.2f}"
+            'Driver': driver_name, 'Team': stats['team_name'],
+            'Mode Position': mode_position, 'Mode Count': mode_count,
+            'Avg Points': avg_points, 'DNF Rate (%)': f"{dnf_rate:.2f}"
         }
         for pos in range(1, len(all_drivers) + 1):
             result[f'P{pos}_Prob'] = (stats['finishing_positions'].get(pos, 0) / num_sims) * 100
@@ -653,16 +727,18 @@ if __name__ == "__main__":
             chosen_circuit = CIRCUIT_DATA[circuit_choice]
             
             total_simulations = int(input("\nEnter total number of Monte Carlo simulations to run (e.g., 5000): "))
-            use_enhanced = input("\nUse enhanced simulation features? (y/n): ").strip().lower() == 'y'
+            use_enhanced = input("Use enhanced simulation features? (y/n): ").strip().lower() == 'y'
             
             save_individual_races = input("Save individual race results to CSVs? (y/n): ").strip().lower() == 'y'
             race_results_output_dir = None
             if save_individual_races:
-                # Base directory for all individual race results
                 base_output_folder_name = "individual_results"
                 race_results_output_dir = os.path.join(os.getcwd(), base_output_folder_name)
-                # The circuit-specific subdirectory will be created inside run_monte_carlo_simulation
                 print(f"Individual race results will be saved under: {race_results_output_dir}/{{Circuit Name}}/")
+            
+            show_logs = input("Show detailed race logs for each simulation? (y/n): ").strip().lower() == 'y'
+            save_logs = input("Save detailed race logs to text files? (y/n): ").strip().lower() == 'y'
+
 
         except (ValueError, IndexError):
             print("Invalid input. Exiting.")
@@ -708,7 +784,10 @@ if __name__ == "__main__":
                 if use_enhanced:
                     weather_for_sim['variability'] = weather_data.get('variability', 0.1 if weather_name != 'Dry' else 0.05)
                 
-                results_for_this_weather = run_monte_carlo_simulation(current_weather_sims, chosen_circuit, weather_for_sim, race_entries_template, use_enhanced, race_results_output_dir)
+                results_for_this_weather = run_monte_carlo_simulation(
+                    current_weather_sims, chosen_circuit, weather_for_sim, 
+                    race_entries_template, use_enhanced, race_results_output_dir, show_logs, save_logs
+                )
                 all_sim_results_across_weathers.extend(results_for_this_weather)
             
             if all_sim_results_across_weathers:
