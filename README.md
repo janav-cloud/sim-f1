@@ -50,6 +50,7 @@ Ensure TEAM DATA.csv, DRIVERS DATA.csv, and CALCULATIONS.csv are in the root dir
 ## 📊 Outputs
 - Individual Race Results CSV: Includes detailed simulation results per race.
 - Aggregated Summary CSV: Shows average positions, DNF rates, and probabilities of finishing in each position.
+- Complete logs containing information about the race simulation circuit wise.
 
 ### 📌 Notes
 - Only drivers with complete data across all three CSVs will be simulated.
