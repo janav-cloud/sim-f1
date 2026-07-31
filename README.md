@@ -43,6 +43,7 @@ f1_race_simulator/
 
 - Python 3.7+
 - pandas
+- Next.js
 
 Install dependencies:
 
@@ -58,12 +59,21 @@ All outputs are organized under the `outputs/` directory:
 - **Aggregated Summaries**: `outputs/results/aggregated/` (Overall multi-simulation statistics and P1-P20 position tables)
 - **Individual Race Results**: `outputs/results/races/{Circuit}/{Weather}/` (Detailed CSV per race iteration)
 - **Detailed Race Logs**: `outputs/logs/races/{Circuit}/{Weather}/` (Lap-by-lap text event logs)
-- **Race Replays**: `outputs/replays/{Circuit}/{Weather}/` (JSON telemetry for the web dashboard visualization)
+- **Race Replays**: `outputs/replays/{Circuit}/{Weather}/` (BETA Feature: JSON telemetry for the web dashboard visualization)
 
 ### 📌 Notes
 - Only drivers with complete data across all three CSVs will be simulated.
 - Strategies and tire compounds are randomly assigned but weighted based on circuit and strategy type.
 - Weather may change dynamically during races in enhanced mode.
+- For the race replay, use the "dashboard" directory.
+#### Steps are as follows:
+1. Prerequisites
+```bash
+cd dashboard
+npm install
+npm run dev
+```
+2. As the website loads (localhost:3000), upload the JSON file in the replays directory.
 
 ### 🧠 Credits
 Developed for F1 simulation and strategy modeling. Data and structure are customizable for other motorsport formats.
