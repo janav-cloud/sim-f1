@@ -26,10 +26,16 @@ f1_race_simulator/
 ├── weather_conditions.py   # Weather effects on grip, engine performance, etc.
 ├── race_strategy.py        # Strategy types and their acumen
 ├── weather_transitions.py  # Defines probabilities of weather changing
+├── race_sim_adv.py         # Advanced Monte Carlo race simulation engine
 ├── TEAM DATA.csv           # Team attributes (pit stop speed, strategy acumen)
 ├── DRIVERS DATA.csv        # Driver skill profiles
 ├── CALCULATIONS.csv        # Car performance scores per team
-├── main.py                 # The main simulation script that runs the race
+├── outputs/                # Structured simulation outputs folder
+│   ├── results/            # Race result CSVs
+│   │   ├── aggregated/     # Aggregated summary & P1-P20 CSV results
+│   │   └── races/          # Detailed race results per circuit and weather
+│   ├── logs/               # Detailed lap-by-lap race logs per circuit and weather
+│   └── replays/            # Lap-by-lap JSON replay telemetry files
 └── README.md               # Project README file
 ```
 
@@ -48,9 +54,11 @@ pip install pandas
 Ensure TEAM DATA.csv, DRIVERS DATA.csv, and CALCULATIONS.csv are in the root directory.
 
 ## 📊 Outputs
-- Individual Race Results CSV: Includes detailed simulation results per race.
-- Aggregated Summary CSV: Shows average positions, DNF rates, and probabilities of finishing in each position.
-- Complete logs containing information about the race simulation circuit wise.
+All outputs are organized under the `outputs/` directory:
+- **Aggregated Summaries**: `outputs/results/aggregated/` (Overall multi-simulation statistics and P1-P20 position tables)
+- **Individual Race Results**: `outputs/results/races/{Circuit}/{Weather}/` (Detailed CSV per race iteration)
+- **Detailed Race Logs**: `outputs/logs/races/{Circuit}/{Weather}/` (Lap-by-lap text event logs)
+- **Race Replays**: `outputs/replays/{Circuit}/{Weather}/` (JSON telemetry for the web dashboard visualization)
 
 ### 📌 Notes
 - Only drivers with complete data across all three CSVs will be simulated.
