@@ -26,6 +26,8 @@ def load_csv_data(filepath):
     try:
         df = pd.read_csv(filepath)
         df.columns = df.columns.str.strip()
+        for col in df.select_dtypes(include=['object']).columns:
+            df[col] = df[col].astype(str).str.strip()
         print(f"Successfully loaded data from {filepath}")
         return df.to_dict(orient='records')
     except FileNotFoundError:
@@ -55,14 +57,22 @@ class RaceEntry:
         self.strategy_aggressive_acumen = team_data['strategy_aggressive_acumen']
         self.strategy_balanced_acumen = team_data['strategy_balanced_acumen']
         self.strategy_conservative_acumen = team_data['strategy_conservative_acumen']
-        self.car_overall_score = car_scores['Overall_Car_Score']
-        self.car_engine_hp_final = car_scores['Engine_HP_Final']
-        self.car_engine_rel_final = car_scores['Engine_REL_Final']
-        self.car_chassis_aero_df_final = car_scores['ChassisAero_DF_Final']
-        self.car_chassis_aero_dr_final = car_scores['ChassisAero_DR_Final']
-        self.car_brakes_sp_final = car_scores['Brakes_SP_Final']
-        self.car_brakes_dur_final = car_scores['Brakes_DUR_Final']
-        self.car_tires_wr_final = car_scores['Tires_WR_Final']
+        self.car_overall_score = car_scores.get('Overall_Car_Score', 80.0)
+        self.car_engine_hp_final = car_scores.get('Engine_HP_Final', 8.0)
+        self.car_engine_fe_final = car_scores.get('Engine_FE_Final', 7.5)
+        self.car_engine_rel_final = car_scores.get('Engine_REL_Final', 7.0)
+        self.car_chassis_aero_df_final = car_scores.get('ChassisAero_DF_Final', 8.0)
+        self.car_chassis_aero_dr_final = car_scores.get('ChassisAero_DR_Final', 5.5)
+        self.car_chassis_aero_cs_final = car_scores.get('ChassisAero_CS_Final', 8.0)
+        self.car_suspension_hdl_final = car_scores.get('Suspension_HDL_Final', 8.0)
+        self.car_suspension_twm_final = car_scores.get('Suspension_TWM_Final', 8.0)
+        self.car_suspension_rc_final = car_scores.get('Suspension_RC_Final', 8.0)
+        self.car_brakes_sp_final = car_scores.get('Brakes_SP_Final', 8.0)
+        self.car_brakes_hd_final = car_scores.get('Brakes_HD_Final', 8.0)
+        self.car_brakes_dur_final = car_scores.get('Brakes_DUR_Final', 8.0)
+        self.car_tires_grp_final = car_scores.get('Tires_GRP_Final', 8.0)
+        self.car_tires_wr_final = car_scores.get('Tires_WR_Final', 5.5)
+        self.car_tires_con_final = car_scores.get('Tires_CON_Final', 8.0)
         self.initial_position = initial_position
         self.current_position = initial_position
         self.total_race_time_s = 0.0
@@ -84,6 +94,7 @@ class RaceEntry:
         self.fuel_load_kg = 110.0
         self.drs_active = False
         self.in_dirty_air = False
+        self.compounds_used = []
 
         acumen_map = {
             "strategy_aggressive_acumen": self.strategy_aggressive_acumen,
@@ -103,80 +114,197 @@ class RaceEntry:
 
 # --- 4. Simulation Core Logic ---
 def calculate_base_lap_time(circuit):
-    """Calculates a reference lap time based on circuit length."""
-    return circuit['length_km'] * 38
+    """
+    Calculates a realistic reference F1 lap time in seconds based on circuit length and characteristics.
+    """
+    straight_weight = circuit.get('straight_speed_importance', 0.7)
+    cornering_weight = circuit.get('cornering_importance', 0.7)
+    # Calibrated speed model: high straight speed lowers seconds per km; high cornering increases seconds per km
+    sec_per_km = 17.2 - (straight_weight * 3.2) + (cornering_weight * 4.2)
+    if circuit.get('track_type') == 'Street Circuit' and circuit.get('length_km', 5.0) < 4.0:
+        sec_per_km += 3.5  # Monaco slow-speed twisty street adjustment
+    return circuit['length_km'] * sec_per_km
 
 def calculate_lap_time(entry, circuit, weather, enhanced_simulation=False, weather_changed=False, track_grip_bonus=0.0, ers_power_boost=0.0):
     """
-    Calculates the time for a single lap for a given entry.
+    Calculates the realistic lap time for a single lap for a given entry.
     """
     base_time = calculate_base_lap_time(circuit)
     speed_weight = circuit['straight_speed_importance']
     cornering_weight = circuit['cornering_importance']
     braking_weight = circuit['braking_demands']
-    total_weight = speed_weight + cornering_weight + braking_weight
+    downforce_sens = circuit.get('downforce_sensitivity', 0.7)
     
-    effective_hp = (entry.car_engine_hp_final + ers_power_boost) * weather['hp_multiplier']
-    
+    # 1. Dynamic Circuit Trait Emphasis:
+    # High-speed circuits amplify straight power & low drag; technical circuits amplify downforce & corner stability
+    straight_emphasis = (speed_weight / 0.70) ** 1.45
+    corner_emphasis = (cornering_weight / 0.70) ** 1.45 * (downforce_sens / 0.70)
+    w_straight = speed_weight * straight_emphasis
+    w_corner = cornering_weight * corner_emphasis
+    w_brake = braking_weight * 0.22
+    total_weight = w_straight + w_corner + w_brake
+
+    # Scale ERS power boost
+    scaled_ers = (ers_power_boost * 0.12) if enhanced_simulation else 0.0
+    effective_hp = (entry.car_engine_hp_final + scaled_ers) * weather['hp_multiplier']
+
+    # DRS straight speed surge (magnified on high-speed circuits)
     drs_speed_bonus = 0.0
     if enhanced_simulation and entry.drs_active:
-        drs_speed_bonus = 0.15
+        drs_speed_bonus = 0.45 * (speed_weight / 0.70)
 
+    # Aerodynamic downforce & dirty air
     effective_downforce = entry.car_chassis_aero_df_final * weather['downforce_multiplier']
     if enhanced_simulation and entry.in_dirty_air:
-        effective_downforce *= 0.90
+        effective_downforce *= 0.86  # 14% front downforce loss in wake
 
-    straight_line_performance = (effective_hp * 0.7) + (entry.car_chassis_aero_dr_final * 0.3) + drs_speed_bonus
+    # DR (Drag): LOWER is better! On high-speed circuits, drag efficiency gives huge straight speed
+    drag_efficiency = max(0.0, 10.0 - entry.car_chassis_aero_dr_final)
+    straight_line_performance = (effective_hp * 0.65) + (drag_efficiency * 0.35) + drs_speed_bonus
+
+    # Cornering performance integrates DF (Downforce), CS (Cornering Stability), and HDL (Handling)
+    cornering_performance = (effective_downforce * 0.65) + (entry.car_chassis_aero_cs_final * 0.20) + (entry.car_suspension_hdl_final * 0.15)
+
+    # Normalized braking with Heat Dissipation (HD) to reflect brake fade
+    brake_norm = 7.0 + (entry.car_brakes_sp_final - 7.0) * 0.30 + (entry.car_brakes_hd_final - 7.5) * 0.15
+
     perf_score = (
-        (straight_line_performance * speed_weight) +
-        (effective_downforce * cornering_weight) +
-        (entry.car_brakes_sp_final * braking_weight)
+        (straight_line_performance * w_straight) +
+        (cornering_performance * w_corner) +
+        (brake_norm * w_brake)
     ) / total_weight
-    adjusted_time = base_time / (perf_score + 0.5)
-    driver_skill_modifier = 1.0 - (entry.driver_skill * 0.05)
-    adjusted_time *= driver_skill_modifier
-    grip_penalty = 1.0 - weather['grip_multiplier']
-    mitigation = grip_penalty * (entry.driver_wet_weather_ability * 0.5)
-    
+
+    # 2. Car Pace vs Driver Skill Balance:
+    # Lowered slightly on raw car (0.068) so car alone does not decide the race
+    car_pace_delta = -(perf_score - 8.2) * 0.068 * (circuit['length_km'] / 5.0)
+
+    # Wet weather equalizer: in rain, car mechanical differences are compressed by 55% (traction limited)
+    if weather.get('grip_multiplier', 1.0) < 0.90:
+        car_pace_delta *= 0.45
+
+    adjusted_time = base_time + car_pace_delta
+
+    # Driver skill delta: elevated to 1.35 so driver talent has authentic race-winning agency
+    driver_skill_delta = -(entry.driver_skill - 0.85) * 1.35 * (circuit['length_km'] / 5.0)
+    adjusted_time += driver_skill_delta
+
+    # Street Circuit Agility & Curb Riding (Handling + Ride Comfort)
+    if circuit.get('track_type') == 'Street Circuit':
+        curb_agility = ((entry.car_suspension_hdl_final + entry.car_suspension_rc_final - 16.0) / 10.0) * 0.22
+        adjusted_time -= curb_agility
+
+    # Standing start / Lap 1 launch physics
+    if entry.laps_completed == 0:
+        standing_start_delta = 6.2
+        if enhanced_simulation:
+            if entry.current_tire_compound == 'soft':
+                standing_start_delta -= 0.50
+            elif entry.current_tire_compound == 'hard':
+                standing_start_delta += 0.50
+            driver_launch_reaction = (entry.driver_skill - 0.85) * 0.60 + (entry.driver_consistency - 0.5) * 0.35
+            standing_start_delta -= driver_launch_reaction
+        adjusted_time += standing_start_delta
+
+    # 3. Weather & Rain Mastery:
+    grip_penalty = max(0.0, 1.0 - weather['grip_multiplier'])
+    # In rain, elite wet weather drivers mitigate up to 75% of lost grip
+    mitigation = grip_penalty * (entry.driver_wet_weather_ability * 0.75)
     effective_grip_multiplier = weather['grip_multiplier'] + mitigation + track_grip_bonus
+    
+    # Grip loss lap time penalty
+    effective_grip_loss = max(0.0, 1.0 - effective_grip_multiplier)
+    adjusted_time += base_time * (effective_grip_loss * 0.40)
 
-    if enhanced_simulation:
-        if weather_changed:
-            adaptability = entry.assigned_strategy_type.get('weather_adaptability', 0.0)
-            adaptability_modifier = weather.get('adaptability_modifier', 0.2)
-            adjusted_time *= (1.0 - (adaptability * adaptability_modifier * 0.1))
+    # 4. Track Evolution (Rubbering in):
+    if track_grip_bonus > 0:
+        adjusted_time -= base_time * (track_grip_bonus * 0.32)
 
-    adjusted_time /= effective_grip_multiplier
+    if enhanced_simulation and weather_changed:
+        adaptability = entry.assigned_strategy_type.get('weather_adaptability', 0.0)
+        adaptability_modifier = weather.get('adaptability_modifier', 0.2)
+        adjusted_time *= (1.0 - (adaptability * adaptability_modifier * 0.08))
 
-    base_wear_per_lap = circuit['tire_wear_severity'] * (1.1 - entry.car_tires_wr_final)
-    driver_wear_effect = base_wear_per_lap * (1.0 - (entry.driver_tire_management * 0.5))
-    final_wear_this_lap = (driver_wear_effect + weather['tire_wear_modifier']) / 100.0
+    # 5. Tire Degradation Model (Circuit Wear Severity + Driver Tire Management):
+    normalized_tires_wr = entry.car_tires_wr_final / 10.0
+    twm_factor = 1.0 - ((entry.car_suspension_twm_final - 8.0) * 0.04)
+    car_wear_factor = max(0.35, (0.40 + normalized_tires_wr) * twm_factor)
+    
+    laps_factor = max(40, circuit.get('laps', 55))
+    circuit_wear_mult = (circuit['tire_wear_severity'] / 0.70)
+    base_wear_per_lap = (circuit['tire_wear_severity'] / laps_factor) * 2.2 * car_wear_factor * circuit_wear_mult
+    # Driver tire management has increased impact (0.55 factor)
+    driver_wear_effect = base_wear_per_lap * (1.0 - (entry.driver_tire_management * 0.55))
+    final_wear_this_lap = driver_wear_effect + (weather['tire_wear_modifier'] * 0.006)
 
+    # Compound effects on pace and wear
+    weather_rec = weather.get('tire_type_recommendation', 'dry')
     if enhanced_simulation and entry.current_tire_compound:
         if entry.current_tire_compound == 'soft':
-            final_wear_this_lap *= 1.2
-            adjusted_time *= 0.98
+            final_wear_this_lap *= 1.45
+            adjusted_time -= 0.58  # Soft tire initial pace burst
+        elif entry.current_tire_compound == 'medium':
+            final_wear_this_lap *= 1.00
+            # baseline pace
         elif entry.current_tire_compound == 'hard':
-            final_wear_this_lap *= 0.8
-            adjusted_time *= 1.02
+            final_wear_this_lap *= 0.68
+            adjusted_time += 0.42
         elif entry.current_tire_compound == 'intermediate':
-            adjusted_time *= 0.95 if weather.get('tire_type_recommendation', 'dry') == 'intermediate' else 1.05
-            final_wear_this_lap *= 1.0
+            final_wear_this_lap *= 0.90
+            if weather_rec != 'intermediate':
+                adjusted_time += 3.5 if weather_rec == 'dry' else 4.5
         elif entry.current_tire_compound == 'wet':
-            adjusted_time *= 0.90 if weather.get('tire_type_recommendation', 'dry') == 'wet' else 1.10
-            final_wear_this_lap *= 0.7
+            final_wear_this_lap *= 0.70
+            if weather_rec != 'wet':
+                adjusted_time += 8.0 if weather_rec == 'dry' else 3.0
 
-    entry.tire_wear = min(1.0, entry.tire_wear + final_wear_this_lap)
+        # Heavy penalty for slicks in rain
+        if entry.current_tire_compound in ['soft', 'medium', 'hard']:
+            if weather_rec == 'intermediate':
+                adjusted_time += 10.0
+            elif weather_rec == 'wet':
+                adjusted_time += 28.0
+
+        # 6. Thermal Effects (Track Temperature):
+        track_temp = weather.get('track_temp_celsius', 25)
+        if track_temp >= 38:
+            # Hot track thermal degradation: soft tires blister severely; hard tires excel
+            if entry.current_tire_compound == 'soft':
+                final_wear_this_lap *= 1.30
+                if entry.laps_on_current_tires > 5:
+                    adjusted_time += 0.42  # Blistering pace penalty
+            elif entry.current_tire_compound == 'hard':
+                adjusted_time -= 0.30  # Hard tire operating window advantage
+            # Brake thermal fade in high temperatures
+            if entry.car_brakes_hd_final < 8.0:
+                adjusted_time += 0.16
+        elif track_temp <= 18:
+            # Cold track warm-up lag on hard compound
+            if entry.current_tire_compound == 'hard' and entry.laps_on_current_tires <= 4:
+                adjusted_time += 0.55
+            elif entry.current_tire_compound in ['soft', 'medium']:
+                adjusted_time -= 0.25
+
+        # 7. Out-lap fresh tire surge (Powerful Undercut Advantage):
+        if entry.laps_on_current_tires <= 2 and entry.pit_stops_made > 0:
+            adjusted_time -= (0.95 if entry.laps_on_current_tires == 1 else 0.50)
+
+    # Dirty air wear acceleration:
+    if enhanced_simulation and entry.in_dirty_air:
+        final_wear_this_lap *= 1.18  # 18% more wear sliding in dirty air
+
+    entry.tire_wear = min(1.0, max(0.0, entry.tire_wear + final_wear_this_lap))
     entry.laps_on_current_tires += 1
 
-    if entry.tire_wear > 0.8:
-        tire_wear_penalty = (entry.tire_wear ** 3) * 10.0
-    elif entry.tire_wear > 0.5:
-        tire_wear_penalty = (entry.tire_wear ** 2.5) * 7.5
+    # Progressive tire wear penalty (the "cliff"):
+    if entry.tire_wear > 0.80:
+        tire_wear_penalty = (entry.tire_wear ** 3) * 6.5
+    elif entry.tire_wear > 0.50:
+        tire_wear_penalty = (entry.tire_wear ** 2.5) * 4.8
     else:
-        tire_wear_penalty = (entry.tire_wear ** 2) * 5.0
+        tire_wear_penalty = (entry.tire_wear ** 2) * 2.5
     adjusted_time += tire_wear_penalty
 
+    # Graining
     if enhanced_simulation and not entry.has_graining:
         graining_chance = 0.0
         if entry.current_tire_compound in ['soft', 'medium'] and entry.tire_wear > 0.4 and entry.laps_on_current_tires > 8:
@@ -186,16 +314,19 @@ def calculate_lap_time(entry, circuit, weather, enhanced_simulation=False, weath
 
         if random.random() < graining_chance:
             entry.has_graining = True
-            adjusted_time += random.uniform(1.0, 3.0)
+            adjusted_time += random.uniform(1.0, 2.5)
 
     if entry.has_graining:
-        adjusted_time += 1.5
+        adjusted_time += 1.2
 
-    deviation_range = (1.0 - entry.driver_consistency) * 0.5
+    # Driver consistency variance modulated by Suspension_RC (Ride Comfort) and Tires_CON (Consistency)
+    dampener = max(0.7, 1.0 - ((entry.car_suspension_rc_final - 8.0) * 0.02) - ((entry.car_tires_con_final - 7.5) * 0.02))
+    deviation_range = max(0.08, (1.0 - entry.driver_consistency) * 0.45 * dampener)
     random_deviation = random.uniform(-deviation_range, deviation_range)
     adjusted_time += random_deviation
     
-    strategy_bonus = (entry.effective_strategy_acumen - 0.7) * 0.1
+    # Strategy acumen bonus: neutral at 0.70
+    strategy_bonus = (entry.effective_strategy_acumen - 0.70) * 0.08
     adjusted_time -= strategy_bonus
 
     if entry.has_minor_damage:
@@ -204,99 +335,185 @@ def calculate_lap_time(entry, circuit, weather, enhanced_simulation=False, weath
     if enhanced_simulation:
         weather_variability_lap_jitter = weather.get('variability', 0.0) * 0.5
         if random.random() < weather_variability_lap_jitter:
-            adjusted_time *= random.uniform(0.995, 1.005)
+            adjusted_time *= random.uniform(0.997, 1.003)
             
         fuel_burn_rate = circuit['length_km'] * 0.35
+        # Engine_FE_Final (Fuel Efficiency): Higher is better (burns fuel more efficiently)
+        fe_factor = 1.0 - ((entry.car_engine_fe_final - 7.5) * 0.03)
+        fuel_burn_rate *= max(0.85, fe_factor)
         if entry.ers_mode['name'] in ['Overtake', 'Hotlap']:
             fuel_burn_rate *= 1.1
-        elif entry.ers_mode['name'] == 'Recharge':
+        elif entry.ers_mode['name'] == 'Charge':
             fuel_burn_rate *= 0.9
             
         entry.fuel_load_kg = max(0.0, entry.fuel_load_kg - fuel_burn_rate)
-        weight_penalty = (entry.fuel_load_kg / 10.0) * 0.3
+        # Weight penalty: ~0.3s per 10kg
+        weight_penalty = (entry.fuel_load_kg / 10.0) * 0.30
         adjusted_time += weight_penalty
         
         if entry.morale > 1.0:
-            adjusted_time *= (1.0 - min(0.02, (entry.morale - 1.0) * 0.01))
+            adjusted_time *= (1.0 - min(0.015, (entry.morale - 1.0) * 0.01))
         elif entry.morale < 1.0:
-            adjusted_time *= (1.0 + min(0.02, (1.0 - entry.morale) * 0.01))
+            adjusted_time *= (1.0 + min(0.015, (1.0 - entry.morale) * 0.01))
 
-    return max(base_time * 0.8, adjusted_time)
+    # Sanity guard: minimum realistic time is 75% of base_time
+    return max(base_time * 0.75, adjusted_time)
 
-def decide_pit_stop(entry, circuit, lap, is_safety_car, enhanced_simulation=False, current_weather_name='Dry'):
-    """Determines if a car should make a pit stop on the current lap."""
+def decide_pit_stop(entry, circuit, lap, is_safety_car, is_vsc=False, enhanced_simulation=False, current_weather_name='Dry', track_state=None, teams_pitting_this_lap=None):
+    """Determines if a car should make a pit stop on the current lap based on strategy and TEAM DATA acumen."""
+    # Under green flag conditions, teams avoid double stacking by staggering stops by 1 lap unless tire wear is critical
+    if enhanced_simulation and not is_safety_car and not is_vsc and teams_pitting_this_lap and entry.team_name in teams_pitting_this_lap:
+        if entry.tire_wear < 0.80:
+            return False
+
     strategy_name = entry.assigned_strategy_type['name']
     total_laps = circuit['laps']
 
-    if is_safety_car and lap > 5 and lap < total_laps - 5:
-        if (entry.assigned_strategy_type['name'] == "Safety Car Optimization (Opportunistic)" and entry.tire_wear > 0.2) or \
-           (entry.effective_strategy_acumen > 0.75 and entry.tire_wear > 0.4):
+    # 1. Safety Car / VSC Opportunism driven by team_strategy_acumen from TEAM DATA.csv
+    if (is_safety_car or is_vsc) and lap > 5 and lap < total_laps - 5:
+        # High acumen teams need lower wear to seize free pit stop; low acumen teams hesitate
+        base_thresh = 0.20 if entry.assigned_strategy_type['name'] == "Safety Car Optimization (Opportunistic)" else 0.35
+        if is_vsc:
+            base_thresh += 0.05
+        # Teams with higher strategy acumen react decisively; lower acumen teams need more wear before pitting
+        acumen_thresh = base_thresh if entry.effective_strategy_acumen > 0.78 else (base_thresh + 0.12)
+        if entry.tire_wear > acumen_thresh:
             return True
 
-    if entry.tire_wear > 0.95:
+    # 2. Critical tire wear failure threshold
+    if entry.tire_wear > 0.85:
         return True
 
+    # 3. Dynamic Undercut Trigger driven by strategy acumen:
+    # High acumen teams notice rival within 1.4s near scheduled window and pit 1-2 laps early to jump them
+    if enhanced_simulation and not is_safety_car and not is_vsc:
+        time_to_front = getattr(entry, 'current_time_to_front', float('inf'))
+        if time_to_front < 1.4 and entry.tire_wear > 0.40 and entry.effective_strategy_acumen > 0.82:
+            num_stops = 2 if "2-Stop" in strategy_name else (3 if "3-Stop" in strategy_name else 1)
+            target_lap = int((total_laps / (num_stops + 1)) * (entry.pit_stops_made + 1))
+            if abs(lap - target_lap) <= 3 and entry.pit_stops_made < num_stops:
+                return True
+
+    # 4. Drying line crossover trigger: if racing line is drying out, ditch wet/inters for slicks!
+    if enhanced_simulation and track_state and track_state.has_dry_line:
+        if entry.current_tire_compound in ['intermediate', 'wet'] and current_weather_name in ['Dry', 'Hot', 'Cold']:
+            if entry.effective_strategy_acumen > 0.55 or lap > 8:
+                return True
+
+    # 5. Weather transitions driven by acumen:
     if enhanced_simulation:
         tire_type_rec = WEATHER_CONDITIONS[current_weather_name].get('tire_type_recommendation', 'dry')
         if tire_type_rec != entry.current_tire_compound:
             if current_weather_name == 'Heavy Rain' and entry.current_tire_compound != 'wet':
                 return True
             elif current_weather_name == 'Light Rain' and entry.current_tire_compound not in ['intermediate', 'wet']:
-                if entry.effective_strategy_acumen > 0.6 or entry.assigned_strategy_type['name'] == "Weather Dependent (Wet/Intermediate Play)":
+                if entry.effective_strategy_acumen > 0.68 or entry.assigned_strategy_type['name'] == "Weather Dependent (Wet/Intermediate Play)":
                     return True
-            elif current_weather_name == 'Dry' and entry.current_tire_compound in ['intermediate', 'wet']:
-                return True
-            elif current_weather_name == 'Hot' and entry.current_tire_compound in ['intermediate', 'wet']:
-                return True
-            elif current_weather_name == 'Cold' and entry.current_tire_compound in ['intermediate', 'wet']:
-                return True
+            elif current_weather_name in ['Dry', 'Hot', 'Cold'] and entry.current_tire_compound in ['intermediate', 'wet']:
+                if not track_state or track_state.wetness_level < 0.20:
+                    return True
 
     num_stops = 1
     if "2-Stop" in strategy_name: num_stops = 2
     elif "3-Stop" in strategy_name: num_stops = 3
 
-    if lap > total_laps - 5: return False
+    if lap > total_laps - 3: return False
 
     pit_window_size = 5
     for i in range(1, num_stops + 1):
         target_lap = int((total_laps / (num_stops + 1)) * i)
         if entry.pit_stops_made == (i - 1) and lap in range(max(1, target_lap - pit_window_size), min(total_laps + 1, target_lap + pit_window_size + 1)):
-            if entry.tire_wear > 0.5 or \
-               (entry.laps_on_current_tires > (total_laps / (num_stops + 1) * 0.8) and entry.tire_wear > 0.3):
+            # High acumen teams time stop when tire wear hits sweet spot; low acumen teams wait longer
+            wear_threshold = 0.45 - (entry.effective_strategy_acumen - 0.75) * 0.12
+            if entry.tire_wear > wear_threshold or \
+               (entry.laps_on_current_tires >= int(total_laps / (num_stops + 1) * 0.75) and entry.tire_wear > 0.25) or \
+               lap >= target_lap:
                 return True
 
+    # Mandatory FIA stop in dry races: if driver hasn't stopped yet, enforce stop before race ends
+    if current_weather_name in ['Dry', 'Hot', 'Cold'] and entry.pit_stops_made == 0 and lap >= total_laps - 8:
+        return True
+
     if enhanced_simulation:
-        if entry.current_tire_compound == 'soft' and entry.tire_wear > 0.65 and \
+        if entry.current_tire_compound == 'soft' and entry.tire_wear > 0.58 and \
            entry.assigned_strategy_type.get('name', '').lower().startswith('aggressive push'):
             return True
-        if entry.tire_wear > 0.75 and entry.effective_strategy_acumen > 0.5:
+        # Smart pit walls with high acumen protect tires from falling off the cliff
+        cliff_protect = 0.72 if entry.effective_strategy_acumen > 0.80 else 0.80
+        if entry.tire_wear > cliff_protect:
             return True
 
     return False
 
-def simulate_pit_stop(entry, lap, logger, is_safety_car, enhanced_simulation=False, current_weather_name='Dry', circuit=None):
+CIRCUIT_PIT_DELTAS = {
+    "Bahrain International Circuit": 21.5,
+    "Jeddah Corniche Circuit": 20.0,
+    "Albert Park Circuit": 20.0,
+    "Baku City Circuit": 20.5,
+    "Miami International Autodrome": 20.0,
+    "Circuit de Monaco": 19.5,
+    "Circuit de Barcelona-Catalunya": 22.0,
+    "Circuit Gilles Villeneuve": 18.5,
+    "Red Bull Ring": 20.0,
+    "Silverstone Circuit": 19.5,
+    "Hungaroring": 20.5,
+    "Circuit de Spa-Francorchamps": 22.5,
+    "Circuit Zandvoort": 19.0,
+    "Autodromo Nazionale Monza": 23.5,
+    "Marina Bay Street Circuit": 28.0,
+    "Suzuka International Racing Course": 22.0,
+    "Losail International Circuit": 22.5,
+    "Circuit of the Americas": 20.5,
+    "Autódromo Hermanos Rodríguez": 21.0,
+    "Autódromo José Carlos Pace": 20.5,
+    "Las Vegas Strip Circuit": 20.0,
+    "Yas Marina Circuit": 21.5,
+}
+
+def simulate_pit_stop(entry, lap, logger, is_safety_car, is_vsc=False, enhanced_simulation=False, current_weather_name='Dry', circuit=None, teams_pitting_this_lap=None, track_state=None):
     """Simulates a pit stop, adding time, resetting tire wear, and choosing new tires."""
-    pit_lane_delta = 18.0
-    base_stationary_time = 2.8
-    time_reduction = entry.team_pit_stop_speed * 0.8
+    circuit_name = circuit.get('name', '') if circuit else ''
+    total_pit_lane_loss = circuit.get('pit_lane_delta') or CIRCUIT_PIT_DELTAS.get(circuit_name, 21.0)
+    # The pit lane driving time excluding stationary tire change (total pit loss minus baseline 2.4s)
+    pit_lane_delta = max(15.0, total_pit_lane_loss - 2.4)
+
+    # 1. Base stationary stop derived from team_pit_stop_speed in TEAM DATA.csv:
+    # Top crews (0.95 Red Bull) -> ~2.18s; Midfield (0.85 Ferrari) -> ~2.33s; Backmarkers (0.68 Sauber) -> ~2.58s
+    base_stationary_time = 3.6
+    time_reduction = entry.team_pit_stop_speed * 1.5
     stationary_time = base_stationary_time - time_reduction
     if enhanced_simulation:
-        pit_error_chance = 0.03 * (1 - entry.team_pit_stop_speed)
+        # 2. Double-stack delay scaled by team_pit_stop_speed:
+        # Elite crews service second car quickly (2.0 - 2.6s), slower crews take longer (3.4 - 4.5s)
+        if teams_pitting_this_lap is not None:
+            if entry.team_name in teams_pitting_this_lap:
+                base_double_stack_delay = 5.2 - (entry.team_pit_stop_speed * 3.0)
+                double_stack_delay = base_double_stack_delay + random.uniform(-0.25, 0.35)
+                stationary_time += double_stack_delay
+                logger.log_double_stack(lap, entry, double_stack_delay)
+            else:
+                teams_pitting_this_lap.add(entry.team_name)
+
+        # 3. Pit stop error chance and duration scaled by team_pit_stop_speed:
+        pit_error_chance = 0.04 * (1.0 - entry.team_pit_stop_speed)
         if random.random() < pit_error_chance:
-            error_time = random.uniform(1.5, 5.0)
+            error_time = random.uniform(1.8, 4.2 + (1.0 - entry.team_pit_stop_speed) * 2.5)
             stationary_time += error_time
             logger.log_pit_error(lap, entry, error_time)
         else:
-            pit_stop_variability = random.uniform(-0.3, 0.3)
+            pit_stop_variability = random.uniform(-0.35, 0.35) * (1.4 - entry.team_pit_stop_speed * 0.5)
             stationary_time += pit_stop_variability
             
-    pit_stop_time = pit_lane_delta + stationary_time
-    
     if is_safety_car:
-        entry.total_race_time_s += pit_stop_time * 0.5
+        # Safety Car bunches field and cars move at ~50% speed past pit exit
+        pit_stop_time = (pit_lane_delta * 0.5) + stationary_time
+    elif is_vsc:
+        # Under VSC, on-track cars are limited by delta time (~38% slower), reducing net pit loss by ~35%
+        pit_stop_time = (pit_lane_delta * 0.65) + stationary_time
     else:
-        entry.total_race_time_s += pit_stop_time
+        pit_stop_time = pit_lane_delta + stationary_time
         
+    entry.total_race_time_s += pit_stop_time
     entry.pit_stops_made += 1
     entry.tire_wear = 0.0
     entry.laps_on_current_tires = 0
@@ -305,6 +522,10 @@ def simulate_pit_stop(entry, lap, logger, is_safety_car, enhanced_simulation=Fal
     new_compound = None
     tire_type_rec = WEATHER_CONDITIONS[current_weather_name].get('tire_type_recommendation', 'dry')
     
+    # Check if drying line allows switching to dry compound even if weather is damp
+    if enhanced_simulation and track_state and track_state.has_dry_line and current_weather_name in ['Dry', 'Hot', 'Cold']:
+        tire_type_rec = 'dry'
+
     if tire_type_rec == 'intermediate':
         new_compound = 'intermediate'
     elif tire_type_rec == 'wet':
@@ -313,22 +534,39 @@ def simulate_pit_stop(entry, lap, logger, is_safety_car, enhanced_simulation=Fal
         compounds = ['soft', 'medium', 'hard']
         strategy_pref = entry.assigned_strategy_type.get('tire_compound_preference', {'soft': 0.33, 'medium': 0.33, 'hard': 0.34})
         
+        # FIA Rule: in dry races, drivers must use at least two different dry compounds
+        used_so_far = getattr(entry, 'compounds_used', [])
+        # If only 1 compound used so far, require a different dry compound
+        if len(set(used_so_far)) == 1 and entry.current_tire_compound in compounds:
+            different_compounds = [c for c in compounds if c != entry.current_tire_compound]
+        else:
+            different_compounds = compounds
+
         if circuit:
             remaining_laps = circuit['laps'] - entry.laps_completed
-            if remaining_laps < 10:
-                new_compound = random.choices(['soft', 'medium'], weights=[0.7, 0.3], k=1)[0]
-            elif remaining_laps > 30 and entry.tire_wear < 0.2:
-                new_compound = random.choices(['medium', 'hard'], weights=[0.6, 0.4], k=1)[0]
-            elif entry.tire_wear > 0.7:
-                new_compound = random.choices(['medium', 'hard'], weights=[0.6, 0.4], k=1)[0]
+            if remaining_laps < 12:
+                candidates = [c for c in ['soft', 'medium'] if c in different_compounds] or ['soft', 'medium']
+                new_compound = random.choices(candidates, weights=[0.65, 0.35] if len(candidates) == 2 else [1.0], k=1)[0]
+            elif remaining_laps > 28:
+                candidates = [c for c in ['medium', 'hard'] if c in different_compounds] or ['medium', 'hard']
+                new_compound = random.choices(candidates, weights=[0.55, 0.45] if len(candidates) == 2 else [1.0], k=1)[0]
             else:
-                new_compound = random.choices(compounds, weights=[strategy_pref[c] for c in compounds], k=1)[0]
+                candidates = different_compounds
+                weights = [strategy_pref.get(c, 0.33) for c in candidates]
+                total_w = sum(weights) or 1.0
+                new_compound = random.choices(candidates, weights=[w / total_w for w in weights], k=1)[0]
         else:
-            new_compound = random.choices(compounds, weights=[strategy_pref[c] for c in compounds], k=1)[0]
+            candidates = different_compounds
+            weights = [strategy_pref.get(c, 0.33) for c in candidates]
+            total_w = sum(weights) or 1.0
+            new_compound = random.choices(candidates, weights=[w / total_w for w in weights], k=1)[0]
 
     entry.current_tire_compound = new_compound
+    if not hasattr(entry, 'compounds_used'):
+        entry.compounds_used = []
+    entry.compounds_used.append(new_compound)
     
-    logger.log_pit_stop(lap, entry, pit_stop_time, new_compound)
+    logger.log_pit_stop(lap, entry, stationary_time, new_compound, total_pit_loss=pit_stop_time)
     
     return pit_stop_time
 
@@ -336,10 +574,16 @@ def simulate_event(entry, lap, logger, weather, enhanced_simulation=False):
     """Simulates random events like mechanical failures and driver errors."""
     if entry.is_dnf: return
 
-    engine_reliability_penalty_factor = (1.0 - entry.car_engine_rel_final) * 2
-    brakes_durability_penalty_factor = (1.0 - entry.car_brakes_dur_final) * 1.5
+    # CALCULATIONS.csv metrics: Engine_REL_Final (Higher=better), Brakes_DUR_Final (Higher=better), Brakes_HD_Final (Higher=better)
+    rel_normalized = max(0.1, min(1.0, entry.car_engine_rel_final / 10.0))
+    # Combined brake health from Durability and Heat Dissipation
+    brake_health = (entry.car_brakes_dur_final * 0.65) + (entry.car_brakes_hd_final * 0.35)
+    dur_normalized = max(0.1, min(1.0, brake_health / 10.0))
     
-    failure_chance = 0.0002 + (engine_reliability_penalty_factor * 0.001) + (brakes_durability_penalty_factor * 0.0008)
+    engine_reliability_penalty_factor = (1.0 - rel_normalized) * 2.0
+    brakes_durability_penalty_factor = (1.0 - dur_normalized) * 1.5
+    
+    failure_chance = 0.00015 + (engine_reliability_penalty_factor * 0.0008) + (brakes_durability_penalty_factor * 0.0006)
 
     if enhanced_simulation:
         if entry.assigned_strategy_type.get('name', '').lower().startswith('aggressive'):
@@ -367,7 +611,9 @@ def simulate_event(entry, lap, logger, weather, enhanced_simulation=False):
         logger.log_dnf(lap, entry)
         return
 
-    error_chance = 0.001 * (1.5 - entry.driver_consistency) + weather['driver_error_chance_modifier']
+    # Driver error chance mitigated by wet weather ability in the rain
+    rain_error_mod = weather.get('driver_error_chance_modifier', 0.0) * (1.0 - entry.driver_wet_weather_ability * 0.5)
+    error_chance = 0.0008 * (1.5 - entry.driver_consistency) + (rain_error_mod * 0.20)
     if enhanced_simulation:
         error_chance += weather.get('variability', 0.0) * 0.0005
         if entry.tire_wear > 0.8:
@@ -379,57 +625,64 @@ def simulate_event(entry, lap, logger, weather, enhanced_simulation=False):
         if enhanced_simulation:
             entry.morale = max(0.8, entry.morale - 0.1)
         incident_type_roll = random.random()
-        if incident_type_roll < 0.05:
+        if incident_type_roll < 0.06:
             entry.is_dnf = True
             entry.dnf_reason = "Driver Error (Crash)"
             logger.log_dnf(lap, entry)
-        elif incident_type_roll < 0.2:
-            entry.total_race_time_s += random.uniform(5.0, 10.0)
+        elif incident_type_roll < 0.22:
+            entry.total_race_time_s += random.uniform(4.0, 9.0)
         else:
-            entry.total_race_time_s += random.uniform(1.0, 3.0)
+            entry.total_race_time_s += random.uniform(1.0, 2.5)
 
 
 def check_for_overtake(front_entry, rear_entry, circuit, time_diff, enhanced_simulation=False):
     """Calculates the probability of an overtake attempt being successful."""
-    pace_advantage = (rear_entry.car_overall_score - front_entry.car_overall_score) * 0.2
-    skill_advantage = (rear_entry.driver_overtaking_skill - front_entry.driver_defending_skill) * 0.3
-    track_difficulty = circuit['overtaking_difficulty'] * 0.4
+    # Moderated car advantage (0.008) so raw car does not overpower driver racecraft
+    pace_advantage = (rear_entry.car_overall_score - front_entry.car_overall_score) * 0.008
+    # Elevated driver racecraft (overtaking vs defending skill)
+    skill_advantage = (rear_entry.driver_overtaking_skill - front_entry.driver_defending_skill) * 0.45
+    # Circuit track difficulty (high at Monaco/Singapore, low at Monza/Spa)
+    track_difficulty = circuit['overtaking_difficulty'] * 0.42
     
-    overtake_prob = 0.3 + pace_advantage + skill_advantage - track_difficulty
+    overtake_prob = 0.22 + pace_advantage + skill_advantage - track_difficulty
 
     if enhanced_simulation:
         if front_entry.current_position <= 5:
             overtake_prob -= 0.05
         
         tire_wear_diff = front_entry.tire_wear - rear_entry.tire_wear
-        overtake_prob += tire_wear_diff * 0.15
+        overtake_prob += tire_wear_diff * 0.24
 
         if circuit['straight_speed_importance'] > 0.7 and circuit.get('downforce_sensitivity', 0.5) < 0.7:
             if time_diff < 0.8:
-                overtake_prob += 0.15
+                overtake_prob += 0.16
             elif time_diff < 1.0:
-                overtake_prob += 0.05
+                overtake_prob += 0.06
 
         overtake_prob += (rear_entry.driver_consistency - 0.5) * 0.05 
         
-        if front_entry.driver_defending_skill > rear_entry.driver_overtaking_skill and front_entry.tire_wear < 0.7:
-            overtake_prob -= 0.03
+        # Elite defending driver holding position on healthy tires
+        if front_entry.driver_defending_skill > rear_entry.driver_overtaking_skill and front_entry.tire_wear < 0.70:
+            overtake_prob -= 0.06
         
         if rear_entry.assigned_strategy_type.get('name', '').lower().startswith('aggressive'):
-            overtake_prob += 0.02
+            overtake_prob += 0.03
             
         if rear_entry.ers_mode['name'] == 'Overtake':
-            overtake_prob += 0.15
+            overtake_prob += 0.18
         if front_entry.ers_mode['name'] == 'Defend':
-            overtake_prob -= 0.10
+            overtake_prob -= 0.12
             
         if rear_entry.drs_active:
-            overtake_prob += 0.25
+            if front_entry.drs_active:
+                overtake_prob += 0.05  # DRS train resistance: defending car also has DRS open
+            else:
+                overtake_prob += 0.26
             
         overtake_prob += (rear_entry.morale - 1.0) * 0.1
         overtake_prob -= (front_entry.morale - 1.0) * 0.1
 
-    return random.random() < max(0.0, min(1.0, overtake_prob))
+    return random.random() < max(0.02, min(0.95, overtake_prob))
 
 
 def simulate_race(circuit, weather, entries, enhanced_simulation=False):
@@ -454,10 +707,13 @@ def simulate_race(circuit, weather, entries, enhanced_simulation=False):
         entry.in_dirty_air = False
 
     safety_car_laps = 0
+    safety_car_end_lap = -10
+    vsc_laps = 0
+    vsc_end_lap = -10
     current_weather = weather.copy()
     current_weather_name = weather['name']
     
-    track_state = TrackState()
+    track_state = TrackState(track_type=circuit.get('track_type', 'Permanent'), initial_weather=current_weather_name)
     logger = RaceLogger()
     
     replay_data = {
@@ -469,6 +725,7 @@ def simulate_race(circuit, weather, entries, enhanced_simulation=False):
         'events': []
     }
     for entry in entries:
+        entry.compounds_used = [entry.current_tire_compound] if entry.current_tire_compound else []
         replay_data['starting_grid'].append({
             'driver': entry.driver_name,
             'team': entry.team_name,
@@ -479,17 +736,23 @@ def simulate_race(circuit, weather, entries, enhanced_simulation=False):
 
     for lap in range(1, circuit['laps'] + 1):
         is_safety_car_deployed_this_lap = False
-        if safety_car_laps == 0 and lap > 2 and lap < circuit['laps'] - 5:
-            non_dnf_incident_chance = 0.005 
+        if safety_car_laps == 0 and vsc_laps == 0 and lap > 2 and lap < circuit['laps'] - 5:
+            non_dnf_incident_chance = 0.006 
             dnf_occurred_last_lap = any(e.laps_completed == lap - 1 and e.is_dnf for e in entries)
             if dnf_occurred_last_lap or random.random() < non_dnf_incident_chance:
-                sc_probability = 0.6 if circuit.get('track_type') == 'Street Circuit' else 0.4
-                if random.random() < sc_probability:
+                is_street = circuit.get('track_type') == 'Street Circuit'
+                incident_severity_roll = random.random()
+                full_sc_prob = 0.65 if is_street else 0.40
+                if incident_severity_roll < full_sc_prob:
                     is_safety_car_deployed_this_lap = True
                     safety_car_laps = random.randint(2, 4)
                     logger.log_safety_car(lap)
+                else:
+                    vsc_laps = random.randint(1, 2)
+                    logger.log_vsc(lap)
 
         is_safety_car_active = safety_car_laps > 0
+        is_vsc_active = (vsc_laps > 0) and not is_safety_car_active
         weather_changed_this_lap = False
 
         if enhanced_simulation:
@@ -514,7 +777,7 @@ def simulate_race(circuit, weather, entries, enhanced_simulation=False):
                         track_state.handle_weather_change(current_weather_name)
                         logger.log_weather_change(lap, new_weather_name)
 
-        track_state.update_rubber(len([e for e in entries if not e.is_dnf]))
+        track_state.update_rubber(len([e for e in entries if not e.is_dnf]), current_weather=current_weather_name, total_cars=len(entries))
         track_grip_bonus = track_state.get_grip_bonus() if enhanced_simulation else 0.0
 
         live_race_order = sorted([e for e in entries if not e.is_dnf], key=lambda x: x.total_race_time_s)
@@ -530,37 +793,45 @@ def simulate_race(circuit, weather, entries, enhanced_simulation=False):
                 rear_car = live_race_order[i+1] if i < len(live_race_order) - 1 else None
                 time_to_front = entry.total_race_time_s - front_car.total_race_time_s if front_car else float('inf')
                 time_to_rear = rear_car.total_race_time_s - entry.total_race_time_s if rear_car else float('inf')
-                manage_ers(entry, lap, time_to_front, time_to_rear)
+                manage_ers(entry, lap, time_to_front, time_to_rear, circuit=circuit)
                 
-                entry.drs_active = lap > 2 and not is_safety_car_active and time_to_front < 1.0
+                # FIA Rule: DRS enabled only after 2 green flag racing laps (at start and after restarts)
+                drs_legal = (lap > 2) and (not is_safety_car_active) and (not is_vsc_active) and (lap > safety_car_end_lap + 2) and (lap > vsc_end_lap + 1)
+                entry.drs_active = drs_legal and (time_to_front < 1.0)
                 entry.in_dirty_air = time_to_front < 2.0
 
+        teams_pitting_this_lap = set()
         for entry in entries:
             if entry.is_dnf: continue
 
             simulate_event(entry, lap, logger, current_weather, enhanced_simulation)
             if entry.is_dnf: continue
 
-            if decide_pit_stop(entry, circuit, lap, is_safety_car_active, enhanced_simulation, current_weather_name):
-                simulate_pit_stop(entry, lap, logger, is_safety_car_active, enhanced_simulation, current_weather_name, circuit)
+            if decide_pit_stop(entry, circuit, lap, is_safety_car_active, is_vsc=is_vsc_active, enhanced_simulation=enhanced_simulation, current_weather_name=current_weather_name, track_state=track_state, teams_pitting_this_lap=teams_pitting_this_lap):
+                simulate_pit_stop(entry, lap, logger, is_safety_car_active, is_vsc=is_vsc_active, enhanced_simulation=enhanced_simulation, current_weather_name=current_weather_name, circuit=circuit, teams_pitting_this_lap=teams_pitting_this_lap, track_state=track_state)
 
             ers_boost = entry.ers_mode['power_boost'] if enhanced_simulation else 0.0
             lap_time = calculate_lap_time(entry, circuit, current_weather, enhanced_simulation, weather_changed_this_lap, track_grip_bonus, ers_boost)
             
             leader_laps = max(e.laps_completed for e in entries)
-            if entry.laps_completed < leader_laps -1:
+            if entry.laps_completed < leader_laps - 1:
                 time_to_leader = entry.total_race_time_s - live_race_order[0].total_race_time_s
-                if time_to_leader > 0 and time_to_leader < 5: 
-                    lap_time *= 1.02 
+                if 0 < time_to_leader < 5: 
+                    lap_time *= 1.015 
                     logger.log_blue_flag(lap, entry)
                     if len(live_race_order) > 0:
-                        live_race_order[0].total_race_time_s += random.uniform(0.5, 1.2)
+                        live_race_order[0].total_race_time_s += random.uniform(0.1, 0.25)
 
             if is_safety_car_active:
-                if hasattr(entry, 'current_time_to_front') and entry.current_time_to_front > 1.0:
-                    lap_time = calculate_base_lap_time(circuit) * 1.2 + random.uniform(-0.5, 0.5)
+                sc_base = calculate_base_lap_time(circuit) * 1.35
+                if hasattr(entry, 'current_time_to_front') and entry.current_time_to_front > 1.2:
+                    lap_time = sc_base * 0.95 + random.uniform(-0.2, 0.2)
                 else:
-                    lap_time = calculate_base_lap_time(circuit) * 1.4 + random.uniform(-0.5, 0.5)
+                    lap_time = sc_base + random.uniform(-0.2, 0.2)
+            elif is_vsc_active:
+                # Under VSC, delta pacing preserves on-track gaps without physical safety car bunching
+                vsc_base = calculate_base_lap_time(circuit) * 1.38
+                lap_time = vsc_base + random.uniform(-0.25, 0.25)
 
             entry.total_race_time_s += lap_time
             entry.laps_completed += 1
@@ -568,13 +839,19 @@ def simulate_race(circuit, weather, entries, enhanced_simulation=False):
         if is_safety_car_active:
             safety_car_laps -= 1
             if safety_car_laps == 0:
+                safety_car_end_lap = lap
                 logger.log_safety_car_ends(lap)
+        elif is_vsc_active:
+            vsc_laps -= 1
+            if vsc_laps == 0:
+                vsc_end_lap = lap
+                logger.log_vsc_ends(lap)
 
         live_race_order = sorted([e for e in entries if not e.is_dnf], key=lambda x: x.total_race_time_s)
         for i, entry in enumerate(live_race_order):
             entry.current_position = i + 1
             
-        if enhanced_simulation and not is_safety_car_active:
+        if enhanced_simulation and not is_safety_car_active and not is_vsc_active:
             teams = {e.team_name for e in live_race_order}
             for team in teams:
                 team_drivers = [e for e in live_race_order if e.team_name == team]
@@ -585,21 +862,27 @@ def simulate_race(circuit, weather, entries, enhanced_simulation=False):
                         team_drivers[0].total_race_time_s += time_swap_diff + 0.1
                         live_race_order.sort(key=lambda x: x.total_race_time_s)
 
-        for i in range(len(live_race_order) - 1, 0, -1):
-            rear_entry, front_entry = live_race_order[i], live_race_order[i-1]
-            time_difference = rear_entry.total_race_time_s - front_entry.total_race_time_s
-            
-            if 0 < time_difference < 1.2: 
-                if check_for_overtake(front_entry, rear_entry, circuit, time_difference, enhanced_simulation):
-                    logger.log_overtake(lap, rear_entry, front_entry)
-                    front_entry.total_race_time_s = rear_entry.total_race_time_s + random.uniform(0.1, 0.3)
-                    
-                    if enhanced_simulation:
-                        rear_entry.morale = min(1.2, rear_entry.morale + 0.05)
-                        front_entry.morale = max(0.8, front_entry.morale - 0.05)
-                    
-                    live_race_order.sort(key=lambda x: x.total_race_time_s)
-                    break 
+        overtakes_this_lap = 0
+        max_overtakes_per_lap = 4
+        if not is_safety_car_active and not is_vsc_active:
+            for i in range(len(live_race_order) - 1, 0, -1):
+                if overtakes_this_lap >= max_overtakes_per_lap:
+                    break
+                rear_entry, front_entry = live_race_order[i], live_race_order[i-1]
+                time_difference = rear_entry.total_race_time_s - front_entry.total_race_time_s
+                
+                if 0 < time_difference < 1.2: 
+                    if check_for_overtake(front_entry, rear_entry, circuit, time_difference, enhanced_simulation):
+                        logger.log_overtake(lap, rear_entry, front_entry)
+                        front_entry.total_race_time_s = rear_entry.total_race_time_s + random.uniform(0.12, 0.25)
+                        
+                        if enhanced_simulation:
+                            rear_entry.morale = min(1.2, rear_entry.morale + 0.05)
+                            front_entry.morale = max(0.8, front_entry.morale - 0.05)
+                        
+                        overtakes_this_lap += 1
+
+        live_race_order.sort(key=lambda x: x.total_race_time_s) 
 
         for idx, entry_sorted in enumerate(live_race_order):
             entry_sorted.current_position = idx + 1
@@ -622,7 +905,8 @@ def simulate_race(circuit, weather, entries, enhanced_simulation=False):
         replay_data['laps_data'].append({
             'lap': lap,
             'weather': current_weather_name,
-            'safety_car': is_safety_car_active,
+            'safety_car': is_safety_car_active or is_vsc_active,
+            'vsc': is_vsc_active,
             'standings': lap_state
         })
 
@@ -658,6 +942,43 @@ def generate_final_race_result(final_results):
     result_df = pd.DataFrame(result_data)
     return result_df
 
+def calculate_circuit_quali_pace(entry, circuit, weather):
+    """
+    Calculates single-lap qualifying pace considering:
+    - Circuit straight speed and low drag efficiency (power circuits like Monza, Spa, Vegas)
+    - Circuit cornering importance, downforce sensitivity, and handling (Monaco, Hungaroring, Suzuka)
+    - Weather grip & wet weather ability (rain masters excel in wet qualifying)
+    - Driver raw skill and consistency (consistency controls clean banker lap vs mistakes)
+    """
+    speed_w = circuit.get('straight_speed_importance', 0.7)
+    corner_w = circuit.get('cornering_importance', 0.7)
+    downforce_sens = circuit.get('downforce_sensitivity', 0.7)
+    
+    # Drag efficiency (lower drag = higher straight speed)
+    drag_eff = max(0.0, 10.0 - entry.car_chassis_aero_dr_final)
+    straight_perf = (entry.car_engine_hp_final * 0.65) + (drag_eff * 0.35)
+    corner_perf = (entry.car_chassis_aero_df_final * 0.60) + (entry.car_chassis_aero_cs_final * 0.25) + (entry.car_suspension_hdl_final * 0.15)
+    
+    car_circuit_perf = (straight_perf * speed_w + corner_perf * corner_w * downforce_sens) / (speed_w + corner_w * downforce_sens)
+    
+    # Driver talent in qualifying
+    driver_quali = entry.driver_skill * 10.0
+    
+    # In wet qualifying, wet mastery is decisive & car differences are compressed
+    grip_mult = weather.get('grip_multiplier', 1.0)
+    if grip_mult < 0.90:
+        wet_bonus = (entry.driver_wet_weather_ability - 0.80) * 8.0
+        driver_quali += wet_bonus
+        car_circuit_perf = 8.0 + (car_circuit_perf - 8.0) * 0.45
+        
+    # Consistency controls qualifying mistake / flyer variance
+    consistency_range = max(0.15, (1.0 - entry.driver_consistency) * 1.4)
+    driver_variance = random.uniform(-consistency_range, consistency_range)
+    
+    # Balanced weighting: 35% car circuit suitability, 65% driver prowess + variance
+    final_quali_pace = (car_circuit_perf * 0.35) + (driver_quali * 0.65) + driver_variance
+    return final_quali_pace
+
 def run_monte_carlo_simulation(num_simulations, circuit, weather, race_entries_template, enhanced_simulation=False, race_results_output_dir=None, show_logs=False, save_logs=False, save_individual_races=False):
     """Runs the race simulation multiple times for a specific weather condition."""
     print(f"\n--- Running {num_simulations} simulations for {weather['name']} conditions at {circuit['name']} ---")
@@ -678,20 +999,35 @@ def run_monte_carlo_simulation(num_simulations, circuit, weather, race_entries_t
                 'strategy_balanced_acumen': entry_template.strategy_balanced_acumen, 'strategy_conservative_acumen': entry_template.strategy_conservative_acumen
             }
             car_scores_copy = {
-                'Overall_Car_Score': entry_template.car_overall_score, 'Engine_HP_Final': entry_template.car_engine_hp_final,
-                'Engine_REL_Final': entry_template.car_engine_rel_final, 'ChassisAero_DF_Final': entry_template.car_chassis_aero_df_final,
-                'ChassisAero_DR_Final': entry_template.car_chassis_aero_dr_final, 'Brakes_SP_Final': entry_template.car_brakes_sp_final,
-                'Brakes_DUR_Final': entry_template.car_brakes_dur_final, 'Tires_WR_Final': entry_template.car_tires_wr_final
+                'Overall_Car_Score': entry_template.car_overall_score,
+                'Engine_HP_Final': entry_template.car_engine_hp_final,
+                'Engine_FE_Final': entry_template.car_engine_fe_final,
+                'Engine_REL_Final': entry_template.car_engine_rel_final,
+                'ChassisAero_DF_Final': entry_template.car_chassis_aero_df_final,
+                'ChassisAero_DR_Final': entry_template.car_chassis_aero_dr_final,
+                'ChassisAero_CS_Final': entry_template.car_chassis_aero_cs_final,
+                'Suspension_HDL_Final': entry_template.car_suspension_hdl_final,
+                'Suspension_TWM_Final': entry_template.car_suspension_twm_final,
+                'Suspension_RC_Final': entry_template.car_suspension_rc_final,
+                'Brakes_SP_Final': entry_template.car_brakes_sp_final,
+                'Brakes_HD_Final': entry_template.car_brakes_hd_final,
+                'Brakes_DUR_Final': entry_template.car_brakes_dur_final,
+                'Tires_GRP_Final': entry_template.car_tires_grp_final,
+                'Tires_WR_Final': entry_template.car_tires_wr_final,
+                'Tires_CON_Final': entry_template.car_tires_con_final
             }
             assigned_strategy = random.choice(RACE_STRATEGY_TYPES)
             new_entry = RaceEntry(driver_data_copy, team_data_copy, car_scores_copy, 0, assigned_strategy)
             sim_entries.append(new_entry)
 
-        initial_grid_positions = list(range(1, len(sim_entries) + 1))
-        random.shuffle(initial_grid_positions)
-        for i, entry in enumerate(sim_entries):
-            entry.initial_position = initial_grid_positions[i]
-            entry.current_position = initial_grid_positions[i]
+        # Seed starting grid based on qualifying pace (circuit fit, weather, driver talent, consistency)
+        for entry in sim_entries:
+            entry.temp_quali = calculate_circuit_quali_pace(entry, circuit, weather)
+        sim_entries.sort(key=lambda x: -x.temp_quali)
+        for grid_pos, entry in enumerate(sim_entries):
+            entry.initial_position = grid_pos + 1
+            entry.current_position = grid_pos + 1
+            entry.total_race_time_s = grid_pos * 0.25  # Grid row separation on race start
 
         for i, entry in enumerate(sim_entries):
             if enhanced_simulation:
@@ -799,15 +1135,154 @@ def aggregate_results(all_simulation_results, all_drivers):
     results_df = pd.DataFrame(final_data).sort_values(by=['Mode Position', 'Mode Count', 'Avg Points'], ascending=[True, False, False])
     return results_df
 
-def generate_final_p1_p20_list(aggregated_df, num_drivers):
-    """Generates a final P1-P20 list with Position, Driver, Team, and Points based on sorted position."""
+def generate_final_classification(aggregated_df, num_drivers=None):
+    """Generates a final classification list with Position, Driver, Team, and Points based on sorted position (supports any number of drivers)."""
     final_list = aggregated_df[['Driver', 'Team', 'Mode Position', 'Avg Points']].copy()
-    final_list = final_list.sort_values(by=['Mode Position', 'Avg Points'], ascending=[True, False]).reset_index(drop=True)
+    final_list = final_list.sort_values(by=['Avg Points', 'Mode Position'], ascending=[False, True]).reset_index(drop=True)
     final_list['Position'] = final_list.index + 1
     final_list['Points'] = final_list['Position'].apply(assign_points) 
     final_list = final_list[['Position', 'Driver', 'Team', 'Points']]
-    final_list = final_list.head(min(num_drivers, 20))
+    if num_drivers is not None:
+        final_list = final_list.head(num_drivers)
     return final_list
+
+# Backwards compatibility alias
+generate_final_p1_p20_list = generate_final_classification
+
+def update_championship_standings(final_classification, circuit_name, all_drivers=None, all_teams=None):
+    """
+    Updates or creates two championship tracking CSVs ONLY at the project root:
+    1. WDC.csv (World Drivers' Championship): Driver Name, Team Name, [Circuit 1], [Circuit 2]..., Total Points
+    2. WCC.csv (World Constructors' Championship): Team Name, [Circuit 1], [Circuit 2]..., Total Points
+    Appends a new column for each completed circuit and recalculates Total Points.
+    Saves ONLY to the workspace root directory.
+    """
+    circuit_col = circuit_name.strip()
+    base_dir = os.getcwd()
+
+    driver_points = {}
+    driver_team_map = {}
+    team_points = {}
+
+    for _, row in final_classification.iterrows():
+        d_name = str(row['Driver']).strip()
+        t_name = str(row['Team']).strip()
+        pts = int(row['Points'])
+        driver_points[d_name] = pts
+        driver_team_map[d_name] = t_name
+        team_points[t_name] = team_points.get(t_name, 0) + pts
+
+    if all_drivers:
+        for d in all_drivers:
+            d_name = d.get('driver_name', '').strip()
+            t_name = d.get('team_name', '').strip()
+            if d_name:
+                driver_team_map.setdefault(d_name, t_name)
+                driver_points.setdefault(d_name, 0)
+
+    if all_teams:
+        for t in all_teams:
+            t_name = t.get('team_name', '').strip()
+            if t_name:
+                team_points.setdefault(t_name, 0)
+
+    # 1. Update WDC.csv (World Drivers' Championship) - ONLY in project root
+    wdc_path = os.path.join(base_dir, "WDC.csv")
+    if os.path.exists(wdc_path):
+        try:
+            wdc_df = pd.read_csv(wdc_path)
+            wdc_df.columns = wdc_df.columns.str.strip()
+        except Exception:
+            wdc_df = pd.DataFrame()
+    else:
+        wdc_df = pd.DataFrame()
+
+    if wdc_df.empty or 'Driver Name' not in wdc_df.columns:
+        driver_list = list(driver_team_map.keys())
+        wdc_df = pd.DataFrame({
+            'Driver Name': driver_list,
+            'Team Name': [driver_team_map.get(d, 'N/A') for d in driver_list]
+        })
+
+    existing_drivers = set(wdc_df['Driver Name'].astype(str).str.strip())
+    new_driver_rows = []
+    for d_name, t_name in driver_team_map.items():
+        if d_name not in existing_drivers:
+            new_driver_rows.append({'Driver Name': d_name, 'Team Name': t_name})
+    if new_driver_rows:
+        wdc_df = pd.concat([wdc_df, pd.DataFrame(new_driver_rows)], ignore_index=True)
+
+    wdc_df['Team Name'] = wdc_df['Driver Name'].astype(str).str.strip().apply(
+        lambda d: driver_team_map.get(d, wdc_df.loc[wdc_df['Driver Name'] == d, 'Team Name'].values[0])
+    )
+    wdc_df[circuit_col] = wdc_df['Driver Name'].astype(str).str.strip().apply(lambda d: driver_points.get(d, 0))
+
+    circuit_cols_wdc = [c for c in wdc_df.columns if c not in {'Driver Name', 'Team Name', 'Total Points'}]
+    for c in circuit_cols_wdc:
+        wdc_df[c] = pd.to_numeric(wdc_df[c], errors='coerce').fillna(0).astype(int)
+
+    wdc_df['Total Points'] = wdc_df[circuit_cols_wdc].sum(axis=1)
+    wdc_df = wdc_df.sort_values(by=['Total Points', circuit_col], ascending=[False, False]).reset_index(drop=True)
+    ordered_wdc_cols = ['Driver Name', 'Team Name'] + circuit_cols_wdc + ['Total Points']
+    wdc_df = wdc_df[ordered_wdc_cols]
+
+    # Save ONLY at project root
+    wdc_df.to_csv(wdc_path, index=False)
+
+    # 2. Update WCC.csv (World Constructors' Championship) - ONLY in project root
+    wcc_path = os.path.join(base_dir, "WCC.csv")
+    if os.path.exists(wcc_path):
+        try:
+            wcc_df = pd.read_csv(wcc_path)
+            wcc_df.columns = wcc_df.columns.str.strip()
+        except Exception:
+            wcc_df = pd.DataFrame()
+    else:
+        wcc_df = pd.DataFrame()
+
+    if wcc_df.empty or 'Team Name' not in wcc_df.columns:
+        team_list = list(team_points.keys())
+        wcc_df = pd.DataFrame({
+            'Team Name': team_list
+        })
+
+    existing_teams = set(wcc_df['Team Name'].astype(str).str.strip())
+    new_team_rows = []
+    for t_name in team_points.keys():
+        if t_name not in existing_teams:
+            new_team_rows.append({'Team Name': t_name})
+    if new_team_rows:
+        wcc_df = pd.concat([wcc_df, pd.DataFrame(new_team_rows)], ignore_index=True)
+
+    wcc_df[circuit_col] = wcc_df['Team Name'].astype(str).str.strip().apply(lambda t: team_points.get(t, 0))
+
+    circuit_cols_wcc = [c for c in wcc_df.columns if c not in {'Team Name', 'Total Points'}]
+    for c in circuit_cols_wcc:
+        wcc_df[c] = pd.to_numeric(wcc_df[c], errors='coerce').fillna(0).astype(int)
+
+    wcc_df['Total Points'] = wcc_df[circuit_cols_wcc].sum(axis=1)
+    wcc_df = wcc_df.sort_values(by=['Total Points', circuit_col], ascending=[False, False]).reset_index(drop=True)
+    ordered_wcc_cols = ['Team Name'] + circuit_cols_wcc + ['Total Points']
+    wcc_df = wcc_df[ordered_wcc_cols]
+
+    # Save ONLY at project root
+    wcc_df.to_csv(wcc_path, index=False)
+
+    print("\n" + "="*70)
+    print(f"--- WORLD DRIVERS' CHAMPIONSHIP (WDC) STANDINGS AFTER {circuit_col.upper()} ---")
+    print("="*70)
+    print(wdc_df.to_string(index=False))
+
+    print("\n" + "="*70)
+    print(f"--- WORLD CONSTRUCTORS' CHAMPIONSHIP (WCC) STANDINGS AFTER {circuit_col.upper()} ---")
+    print("="*70)
+    print(wcc_df.to_string(index=False))
+
+    print(f"\nChampionship Standings successfully updated (saved to project root):")
+    print(f"  - WDC: {wdc_path}")
+    print(f"  - WCC: {wcc_path}")
+
+    return wdc_df, wcc_df
 
 # --- 5. Main Execution Block ---
 if __name__ == "__main__":
@@ -904,13 +1379,17 @@ if __name__ == "__main__":
                 final_df.to_csv(output_filepath, index=False)
                 print(f"\nAggregated results saved to {output_filepath}")
 
-                final_p1_p20 = generate_final_p1_p20_list(final_df, len(valid_drivers))
+                final_classification = generate_final_classification(final_df, len(valid_drivers))
+                num_racers = len(final_classification)
                 print("\n" + "="*50)
-                print("--- FINAL P1-P20 RACE RESULT ---")
+                print(f"--- FINAL P1-P{num_racers} RACE CLASSIFICATION ---")
                 print("="*50)
-                print(final_p1_p20.to_string(index=False))
+                print(final_classification.to_string(index=False))
                 
-                p1_p20_filename = f"Final_P1_P20_{chosen_circuit['name'].replace(' ', '')}_{total_simulations}runs.csv"
-                p1_p20_filepath = os.path.join(agg_output_dir, p1_p20_filename)
-                final_p1_p20.to_csv(p1_p20_filepath, index=False)
-                print(f"\nFinal P1-P20 race result saved to {p1_p20_filepath}")
+                classification_filename = f"Final_Classification_{chosen_circuit['name'].replace(' ', '')}_{total_simulations}runs.csv"
+                classification_filepath = os.path.join(agg_output_dir, classification_filename)
+                final_classification.to_csv(classification_filepath, index=False)
+                print(f"\nFinal race classification saved to {classification_filepath}")
+
+                # Update WDC and WCC Championship CSVs (Only at project root)
+                update_championship_standings(final_classification, chosen_circuit['name'], valid_drivers, teams_data)

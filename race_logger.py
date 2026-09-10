@@ -11,9 +11,12 @@ class RaceLogger:
         # Logs a successful overtake.
         self.log(lap, 'Overtake', f"{overtaking_driver.driver_name} has overtaken {overtaken_driver.driver_name} for P{overtaken_driver.current_position}.")
 
-    def log_pit_stop(self, lap, entry, duration, new_tires):
-        # Logs a pit stop event.
-        self.log(lap, 'Pit Stop', f"{entry.driver_name} pits from P{entry.current_position}. Stop time: {duration:.2f}s. New tires: {new_tires.capitalize()}.")
+    def log_pit_stop(self, lap, entry, stationary_time, new_tires, total_pit_loss=None):
+        # Logs a pit stop event with realistic stationary stop time and total pit lane loss.
+        if total_pit_loss is not None:
+            self.log(lap, 'Pit Stop', f"{entry.driver_name} pits from P{entry.current_position}. Stop: {stationary_time:.2f}s ({total_pit_loss:.1f}s pit loss). New tires: {new_tires.capitalize()}.")
+        else:
+            self.log(lap, 'Pit Stop', f"{entry.driver_name} pits from P{entry.current_position}. Stop: {stationary_time:.2f}s. New tires: {new_tires.capitalize()}.")
 
     def log_pit_error(self, lap, entry, duration):
         # Logs a pit stop event.
@@ -30,6 +33,18 @@ class RaceLogger:
     def log_safety_car_ends(self, lap):
         # Logs when the Safety Car is coming into the pits.
         self.log(lap, 'Safety Car', "Safety Car is in this lap. Racing will resume next lap.")
+
+    def log_vsc(self, lap, reason="incident"):
+        # Logs Virtual Safety Car deployment.
+        self.log(lap, 'Virtual Safety Car', f"Virtual Safety Car (VSC) deployed due to an {reason}. Delta times active.")
+
+    def log_vsc_ends(self, lap):
+        # Logs when Virtual Safety Car ends.
+        self.log(lap, 'Virtual Safety Car', "Track clear. Virtual Safety Car ending. Track is green.")
+
+    def log_double_stack(self, lap, entry, wait_time):
+        # Logs when a driver has to wait for a teammate in a double stack pit stop.
+        self.log(lap, 'Pit Stop Error', f"{entry.driver_name} double-stacked behind teammate! Delayed by {wait_time:.2f}s in pit box.")
 
     def log_weather_change(self, lap, new_weather):
         # Logs a change in weather conditions.
