@@ -77,6 +77,13 @@ export default function Dashboard() {
     return false;
   }, [raceData, currentLap]);
 
+  const isVSC = useCallback(() => {
+    if (!raceData || currentLap === 0) return false;
+    const lapEntry = raceData.laps_data[currentLap - 1];
+    if (lapEntry && !Array.isArray(lapEntry)) return lapEntry.vsc || false;
+    return false;
+  }, [raceData, currentLap]);
+
   // Keyboard shortcuts
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -132,16 +139,24 @@ export default function Dashboard() {
   }
 
   const currentWeather = getCurrentWeather();
-  const scActive = isSafetyCar();
+  const vscActive = isVSC();
+  const scActive = isSafetyCar() && !vscActive;
 
   return (
     <div className="h-screen bg-neutral-950 text-white flex flex-col overflow-hidden">
-      {/* Safety Car Banner */}
+      {/* Safety Car / VSC Banner */}
       {scActive && (
         <div className="bg-yellow-500/90 text-black py-2 px-8 text-center font-bold uppercase tracking-[0.3em] text-sm animate-slide-down animate-pulse-glow flex items-center justify-center gap-3">
           <span className="text-lg">⚠️</span>
           Safety Car Deployed
           <span className="text-lg">⚠️</span>
+        </div>
+      )}
+      {vscActive && (
+        <div className="bg-amber-500/90 text-black py-2 px-8 text-center font-bold uppercase tracking-[0.3em] text-sm animate-slide-down animate-pulse-glow flex items-center justify-center gap-3">
+          <span className="text-lg">⏱️</span>
+          Virtual Safety Car (VSC) Active &bull; Maintain Delta
+          <span className="text-lg">⏱️</span>
         </div>
       )}
 

@@ -26,21 +26,25 @@ class RaceLogger:
         # Logs a driver not finishing the race.
         self.log(lap, 'DNF', f"{entry.driver_name} is out of the race from P{entry.current_position}. Reason: {entry.dnf_reason}.")
 
-    def log_safety_car(self, lap, reason="incident"):
+    def log_safety_car(self, lap, reason="an incident"):
         # Logs the deployment of the Safety Car.
-        self.log(lap, 'Safety Car', f"Safety Car deployed due to an {reason}.")
+        self.log(lap, 'Safety Car', f"Safety Car deployed due to {reason}.")
         
     def log_safety_car_ends(self, lap):
         # Logs when the Safety Car is coming into the pits.
-        self.log(lap, 'Safety Car', "Safety Car is in this lap. Racing will resume next lap.")
+        self.log(lap, 'Safety Car', "Safety Car in this lap. Racing will resume next lap.")
 
-    def log_vsc(self, lap, reason="incident"):
+    def log_vsc(self, lap, reason="an incident"):
         # Logs Virtual Safety Car deployment.
-        self.log(lap, 'Virtual Safety Car', f"Virtual Safety Car (VSC) deployed due to an {reason}. Delta times active.")
+        self.log(lap, 'Virtual Safety Car', f"Virtual Safety Car (VSC) deployed due to {reason}. Delta times active.")
 
     def log_vsc_ends(self, lap):
         # Logs when Virtual Safety Car ends.
         self.log(lap, 'Virtual Safety Car', "Track clear. Virtual Safety Car ending. Track is green.")
+
+    def log_blue_flag(self, lap, entry):
+        # Logs when a backmarker is shown blue flags to let leaders through.
+        self.log(lap, 'Blue Flag', f"{entry.driver_name} (P{entry.current_position}) shown blue flags for approaching leader.")
 
     def log_double_stack(self, lap, entry, wait_time):
         # Logs when a driver has to wait for a teammate in a double stack pit stop.

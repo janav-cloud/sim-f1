@@ -12,6 +12,11 @@ def check_for_team_orders(front_driver, rear_driver, lap, total_laps, logger):
     if time_diff > 2.0 or time_diff < 0:
         return False
 
+    # Cooldown: at least 5 laps between team orders for this team pairing
+    if lap - getattr(front_driver, 'last_team_order_lap', -10) < 5 or \
+       lap - getattr(rear_driver, 'last_team_order_lap', -10) < 5:
+        return False
+
     should_swap = False
 
     # Scenario 1: Front driver has sustained damage and is holding up teammate
@@ -25,14 +30,16 @@ def check_for_team_orders(front_driver, rear_driver, lap, total_laps, logger):
         if rear_driver.effective_strategy_acumen > 0.65 and random.random() < 0.80:
             should_swap = True
 
-    # Scenario 3: Drivers are on different strategies and holding each other up
+    # Scenario 3: Rear driver is on an aggressive multi-stop strategy and needs clear air
     elif time_diff < 1.0:
         front_stops = 1 if "1-Stop" in front_driver.assigned_strategy_type['name'] else 2
         rear_stops = 1 if "1-Stop" in rear_driver.assigned_strategy_type['name'] else 2
-        if front_stops != rear_stops and rear_driver.effective_strategy_acumen > 0.60 and random.random() < 0.60:
+        if rear_stops > front_stops and rear_driver.effective_strategy_acumen > 0.60 and random.random() < 0.75:
             should_swap = True
 
     if should_swap:
+        front_driver.last_team_order_lap = lap
+        rear_driver.last_team_order_lap = lap
         logger.log_team_order(lap, rear_driver.team_name, front_driver, rear_driver)
         # Morale adjustments: front driver is slightly dejected, rear driver is motivated
         front_driver.morale = max(0.85, front_driver.morale - 0.03)

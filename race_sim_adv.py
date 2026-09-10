@@ -79,6 +79,7 @@ class RaceEntry:
         self.laps_completed = 0
         self.is_dnf = False
         self.dnf_reason = ""
+        self.dnf_lap = None
         self.pit_stops_made = 0
         self.tire_wear = 0.0
         self.assigned_strategy_type = assigned_strategy_type
@@ -608,6 +609,7 @@ def simulate_event(entry, lap, logger, weather, enhanced_simulation=False):
         else:
             entry.dnf_reason = "Mechanical Failure"
         entry.is_dnf = True
+        entry.dnf_lap = lap
         logger.log_dnf(lap, entry)
         return
 
@@ -627,6 +629,7 @@ def simulate_event(entry, lap, logger, weather, enhanced_simulation=False):
         incident_type_roll = random.random()
         if incident_type_roll < 0.06:
             entry.is_dnf = True
+            entry.dnf_lap = lap
             entry.dnf_reason = "Driver Error (Crash)"
             logger.log_dnf(lap, entry)
         elif incident_type_roll < 0.22:
@@ -705,6 +708,7 @@ def simulate_race(circuit, weather, entries, enhanced_simulation=False):
         entry.fuel_load_kg = 110.0
         entry.drs_active = False
         entry.in_dirty_air = False
+        entry.dnf_lap = None
 
     safety_car_laps = 0
     safety_car_end_lap = -10
@@ -738,18 +742,48 @@ def simulate_race(circuit, weather, entries, enhanced_simulation=False):
         is_safety_car_deployed_this_lap = False
         if safety_car_laps == 0 and vsc_laps == 0 and lap > 2 and lap < circuit['laps'] - 5:
             non_dnf_incident_chance = 0.006 
-            dnf_occurred_last_lap = any(e.laps_completed == lap - 1 and e.is_dnf for e in entries)
-            if dnf_occurred_last_lap or random.random() < non_dnf_incident_chance:
+            dnfs_last_lap = [e for e in entries if getattr(e, 'dnf_lap', None) == lap - 1]
+            
+            if dnfs_last_lap:
+                crashed_car = dnfs_last_lap[0]
+                is_crash = "Crash" in crashed_car.dnf_reason
                 is_street = circuit.get('track_type') == 'Street Circuit'
-                incident_severity_roll = random.random()
-                full_sc_prob = 0.65 if is_street else 0.40
-                if incident_severity_roll < full_sc_prob:
+                incident_roll = random.random()
+                
+                if is_crash:
+                    # Crashes leave heavy debris or cars in barriers
+                    # Street track: 75% Full SC, 20% VSC, 5% local yellows
+                    # Permanent track: 45% Full SC, 40% VSC, 15% local yellows
+                    sc_prob = 0.75 if is_street else 0.45
+                    vsc_prob = 0.20 if is_street else 0.40
+                    reason = f"a crash involving {crashed_car.driver_name}"
+                else:
+                    # Mechanical retirements (stranded car / smoke / oil)
+                    # Street track: 35% Full SC, 45% VSC, 20% local yellows
+                    # Permanent track: 15% Full SC, 45% VSC, 40% local yellows
+                    sc_prob = 0.35 if is_street else 0.15
+                    vsc_prob = 0.45 if is_street else 0.45
+                    reason = f"a stranded car ({crashed_car.driver_name})"
+                
+                if incident_roll < sc_prob:
                     is_safety_car_deployed_this_lap = True
                     safety_car_laps = random.randint(2, 4)
-                    logger.log_safety_car(lap)
+                    logger.log_safety_car(lap, reason=reason)
+                elif incident_roll < (sc_prob + vsc_prob):
+                    vsc_laps = random.randint(1, 2)
+                    logger.log_vsc(lap, reason=reason)
+            elif random.random() < non_dnf_incident_chance:
+                # Random on-track hazard: carbon debris, loose banner, animal/marshal
+                is_street = circuit.get('track_type') == 'Street Circuit'
+                incident_severity_roll = random.random()
+                full_sc_prob = 0.30 if is_street else 0.15
+                if incident_severity_roll < full_sc_prob:
+                    is_safety_car_deployed_this_lap = True
+                    safety_car_laps = random.randint(2, 3)
+                    logger.log_safety_car(lap, reason="debris on the track")
                 else:
                     vsc_laps = random.randint(1, 2)
-                    logger.log_vsc(lap)
+                    logger.log_vsc(lap, reason="debris on the track")
 
         is_safety_car_active = safety_car_laps > 0
         is_vsc_active = (vsc_laps > 0) and not is_safety_car_active
@@ -1064,7 +1098,7 @@ def run_monte_carlo_simulation(num_simulations, circuit, weather, race_entries_t
         if show_logs:
             print("\n--- Race Log ---")
             for log_entry in race_logs:
-                print(f"Lap {log_entry['lap']:>2}: [{log_entry['type']:<12}] {log_entry['message']}")
+                print(f"Lap {log_entry['lap']:>2}: [{log_entry['type']:<18}] {log_entry['message']}")
 
         if save_individual_races:
             race_csv_dir = os.path.join(base_output_dir, "results", "races", circuit_folder_name, weather_folder_name)
@@ -1081,7 +1115,7 @@ def run_monte_carlo_simulation(num_simulations, circuit, weather, race_entries_t
             log_filepath = os.path.join(log_dir, log_filename)
             with open(log_filepath, 'w') as f:
                 for log_entry in race_logs:
-                    f.write(f"Lap {log_entry['lap']:>2}: [{log_entry['type']:<12}] {log_entry['message']}\n")
+                    f.write(f"Lap {log_entry['lap']:>2}: [{log_entry['type']:<18}] {log_entry['message']}\n")
             print(f"Individual race log saved to {log_filepath}")
 
         all_simulation_results.append([e.__dict__.copy() for e in simulation_results])

@@ -137,6 +137,23 @@ To visualize race replays with interactive lap charts and event feeds:
 
 ---
 
+## ⚙️ Tuning Your Data for Maximum Competitiveness
+
+To create a balanced, multi-winner season where races are decided by tenths of a second:
+
+| File | Parameter | Recommended Range | Purpose |
+| :--- | :--- | :---: | :--- |
+| **`DRIVERS DATA.csv`** | `skill` | `0.80 – 0.98` | Tightens the grid spread so no driver is uncompetitively detached. |
+| | `tire_management` | `0.78 – 0.96` | High ratings allow drivers to pull off successful 1-stop strategies. |
+| | `wet_weather_ability` | `0.75 – 0.96` | Elite wet drivers (Verstappen, Hamilton) carve through the field in the rain. |
+| **`TEAM DATA.csv`** | `team_pit_stop_speed` | `0.76 – 0.95` | Keeps stationary pit stops within $2.1$s–$2.9$s of each other. |
+| | `team_strategy_acumen` | `0.72 – 0.92` | Governs undercut triggers and opportunistic Safety Car pits. |
+| **`CALCULATIONS.csv`** | `Overall_Car_Score` | `78.0 – 88.0` | Keeps constructor spreads within 10 points for tight racing. |
+| | `ChassisAero_DR_Final` | `4.5 – 6.5` | Lower is better. Low drag gives high top speed at Monza & Spa. |
+| | `ChassisAero_DF_Final` | `8.0 – 11.5` | Higher is better. High downforce gives apex grip at Monaco & Singapore. |
+
+---
+
 ### 🧠 Credits
 Developed for Formula 1 simulation, committee modeling, and race strategy analysis.
 
