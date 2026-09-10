@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --background: #08080a;
+  --foreground: #f3f3f3;
 }
 
 @theme inline {
@@ -33,17 +33,18 @@ body {
 
 /* ── Custom Scrollbar ── */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
+  width: 5px;
+  height: 5px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.2);
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.25);
 }
 
 /* ── Animations ── */
@@ -52,45 +53,94 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 .animate-fade-in {
-  animation: fadeIn 0.35s ease-out forwards;
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-100%); }
+  from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 .animate-slide-down {
-  animation: slideDown 0.4s ease-out forwards;
+  animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 8px rgba(234, 179, 8, 0.3); }
-  50% { box-shadow: 0 0 20px rgba(234, 179, 8, 0.6); }
+@keyframes pulse-sc-glow {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(234, 179, 8, 0.35), inset 0 0 10px rgba(234, 179, 8, 0.2);
+    border-color: rgba(234, 179, 8, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(234, 179, 8, 0.7), inset 0 0 18px rgba(234, 179, 8, 0.4);
+    border-color: rgba(250, 204, 21, 1);
+  }
 }
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
+.animate-sc-glow {
+  animation: pulse-sc-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-vsc-glow {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.35), inset 0 0 10px rgba(245, 158, 11, 0.2);
+    border-color: rgba(245, 158, 11, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(245, 158, 11, 0.7), inset 0 0 18px rgba(245, 158, 11, 0.4);
+    border-color: rgba(251, 191, 36, 1);
+  }
+}
+.animate-vsc-glow {
+  animation: pulse-vsc-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes flashYellow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.animate-flash-flag {
+  animation: flashYellow 1s ease-in-out infinite;
 }
 
 @keyframes positionUp {
-  from { background-color: rgba(34, 197, 94, 0.15); }
-  to { background-color: transparent; }
+  0% { background-color: rgba(34, 197, 94, 0.25); }
+  100% { background-color: transparent; }
 }
 .animate-pos-up {
-  animation: positionUp 1.5s ease-out forwards;
+  animation: positionUp 1.2s ease-out forwards;
 }
 
 @keyframes positionDown {
-  from { background-color: rgba(239, 68, 68, 0.15); }
-  to { background-color: transparent; }
+  0% { background-color: rgba(239, 68, 68, 0.25); }
+  100% { background-color: transparent; }
 }
 .animate-pos-down {
-  animation: positionDown 1.5s ease-out forwards;
+  animation: positionDown 1.2s ease-out forwards;
 }
+
+/* ── Carbon Grid Texture ── */
+.carbon-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+
+/* ── DRS Active Pulse ── */
+@keyframes drsPulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(34, 197, 94, 0.4); }
+  50% { box-shadow: 0 0 16px rgba(34, 197, 94, 0.8); }
+}
+.animate-drs {
+  animation: drsPulse 1.2s ease-in-out infinite;
+}
+
+/* ── Shift Lights Bar ── */
+.shift-light-green { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
+.shift-light-red { background: #ef4444; box-shadow: 0 0 6px #ef4444; }
+.shift-light-blue { background: #3b82f6; box-shadow: 0 0 8px #3b82f6; }
 
 /* ── Drag & Drop Zone ── */
 .drag-active {
-  border-color: #ef4444 !important;
-  background-color: rgba(239, 68, 68, 0.08) !important;
+  border-color: #e10600 !important;
+  background-color: rgba(225, 6, 0, 0.08) !important;
 }
 
 /* ── Range Slider ── */
@@ -99,30 +149,31 @@ input[type="range"] {
   appearance: none;
   height: 6px;
   border-radius: 3px;
-  background: #262626;
+  background: #1f1f23;
   outline: none;
 }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  background: #ef4444;
+  background: #e10600;
   cursor: pointer;
-  border: 2px solid #1a1a1a;
-  box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
-  transition: transform 0.15s ease;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 8px rgba(225, 6, 0, 0.6);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
+  transform: scale(1.3);
+  box-shadow: 0 0 12px rgba(225, 6, 0, 0.9);
 }
 input[type="range"]::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  background: #ef4444;
+  background: #e10600;
   cursor: pointer;
-  border: 2px solid #1a1a1a;
-  box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 8px rgba(225, 6, 0, 0.6);
 }
