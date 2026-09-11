@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import LiveTimingTower from "@/components/LiveTimingTower";
 import PlaybackControls from "@/components/PlaybackControls";
 import EventFeed from "@/components/EventFeed";
+import RaceFinishModal from "@/components/RaceFinishModal";
 
 export default function Dashboard() {
   const [raceData, setRaceData] = useState<any>(null);
@@ -13,6 +14,8 @@ export default function Dashboard() {
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
   const [selectedDriver, setSelectedDriver] = useState<string | null>(null);
   const [dismissedIncidentLaps, setDismissedIncidentLaps] = useState<Set<number>>(new Set());
+  const [showFinishModal, setShowFinishModal] = useState<boolean>(false);
+  const [hasAutoOpenedFinishModal, setHasAutoOpenedFinishModal] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const loadJson = (text: string) => {
@@ -27,6 +30,8 @@ export default function Dashboard() {
       setIsPlaying(false);
       setSelectedDriver(null);
       setDismissedIncidentLaps(new Set());
+      setShowFinishModal(false);
+      setHasAutoOpenedFinishModal(false);
     } catch {
       alert("Invalid JSON file. Please provide a valid F1 simulation replay JSON.");
     }
@@ -297,6 +302,18 @@ export default function Dashboard() {
   // Chequered flag at finish
   const isFinished = currentLap === totalLaps && totalLaps > 0;
 
+  // Auto-open finish modal when chequered flag is reached
+  useEffect(() => {
+    if (isFinished) {
+      if (!hasAutoOpenedFinishModal) {
+        setShowFinishModal(true);
+        setHasAutoOpenedFinishModal(true);
+      }
+    } else {
+      setHasAutoOpenedFinishModal(false);
+    }
+  }, [isFinished, hasAutoOpenedFinishModal]);
+
   // ── Upload Screen (When no data loaded) ──
   if (!raceData) {
     return (
@@ -525,11 +542,15 @@ export default function Dashboard() {
               <span className="text-sm animate-flash-flag">⏱️</span>
             </div>
           ) : isFinished ? (
-            <div className="px-4 py-1 rounded-full bg-neutral-100 text-black font-black uppercase tracking-[0.2em] text-xs flex items-center gap-2 shadow-md">
+            <button
+              onClick={() => setShowFinishModal(true)}
+              className="px-4 py-1 rounded-full bg-neutral-100 hover:bg-yellow-400 text-black font-black uppercase tracking-[0.2em] text-xs flex items-center gap-2 shadow-md transition-all cursor-pointer"
+              title="Click to view Official Race Classification"
+            >
               <span>🏁</span>
-              <span>Chequered Flag &bull; Race Finish</span>
-              <span>🏁</span>
-            </div>
+              <span>Chequered Flag &bull; View Results</span>
+              <span>🏆</span>
+            </button>
           ) : currentLap === 0 ? (
             <div className="px-3 py-1 rounded-full bg-neutral-800 text-neutral-300 font-mono font-bold uppercase tracking-wider text-xs border border-white/5">
               Starting Grid
@@ -767,6 +788,16 @@ export default function Dashboard() {
                   <div className="font-bold text-neutral-200">{currentStandings[2]?.driver}</div>
                   <div className="text-[10px] font-mono text-neutral-400">+{currentStandings[2]?.gap?.toFixed(3)}s</div>
                 </div>
+
+                {/* View Official Results Dialog Button */}
+                <button
+                  onClick={() => setShowFinishModal(true)}
+                  className="px-3.5 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-black font-mono font-black text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-yellow-500/30 cursor-pointer flex items-center gap-1.5 ml-2"
+                  title="View full P1-P10 points classification and podium"
+                >
+                  <span>🏆</span>
+                  <span className="hidden sm:inline">Official</span> Results
+                </button>
               </div>
             </div>
           )}
@@ -896,6 +927,15 @@ export default function Dashboard() {
           Lap {currentLap} / {totalLaps}
         </div>
       </footer>
+
+      {/* Race Finish Official Results Dialog (Podium, P1-P10 Points & CSV Export) */}
+      <RaceFinishModal
+        isOpen={showFinishModal}
+        onClose={() => setShowFinishModal(false)}
+        standings={currentStandings || []}
+        circuitName={raceData?.circuit || "Grand Prix"}
+        totalLaps={totalLaps}
+      />
     </div>
   );
 }
